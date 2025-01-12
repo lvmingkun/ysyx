@@ -1,4 +1,3 @@
-VERILATOR = verilator
 CFLAGS = --cc --exe --build -j 4 -Wall
 
 SIM_CPP = ./csrc/*.cpp
