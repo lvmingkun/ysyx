@@ -12,7 +12,7 @@
 
 class Vtop__Syms;
 class Vtop___024root;
-class VerilatedVcdC;
+class VerilatedFstC;
 
 // This class is the main interface to the Verilated model
 class Vtop VL_NOT_FINAL : public VerilatedModel {
@@ -65,7 +65,7 @@ class Vtop VL_NOT_FINAL : public VerilatedModel {
     /// Returns time at next time slot. Aborts if !eventsPending()
     uint64_t nextTimeSlot();
     /// Trace signals in the model; called by application code
-    void trace(VerilatedVcdC* tfp, int levels, int options = 0);
+    void trace(VerilatedFstC* tfp, int levels, int options = 0);
     /// Retrieve name of this model instance (as passed to constructor).
     const char* name() const;
 

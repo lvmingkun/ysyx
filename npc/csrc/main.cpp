@@ -3,7 +3,7 @@
 #include <assert.h>
 #include "Vtop.h"
 #include "verilated.h"
-#include "verilated_vcd_c.h"
+#include "verilated_fst_c.h"
 
 int main(int argc, char** argv) {
 	int i = 0;
@@ -11,7 +11,7 @@ int main(int argc, char** argv) {
 	contextp->commandArgs(argc, argv);
 	Vtop* top = new Vtop{contextp};
 	contextp->traceEverOn(true);
-	VerilatedVcdC* tfp = new VerilatedVcdC;
+	VerilatedFstC* tfp = new VerilatedFstC;
 	top->trace(tfp, 99);
 	tfp->open("wave.fst");
 	while (i < 10) {
@@ -28,6 +28,7 @@ int main(int argc, char** argv) {
 	}
 
 	tfp->close();
+
 	delete tfp;
 	delete top;
 	delete contextp;

@@ -1,6 +1,6 @@
 
 VERILATOR = verilator
-VERILATOR_CFLAGS = --build --cc --exe -j 4 -Wall --trace  --top-module top
+VERILATOR_CFLAGS = --build --cc --exe -j 4 -Wall --trace-fst  --top-module top
 
 SIM_CPP = ./csrc/*.cpp
 TOP_V = ./vsrc/*.v
