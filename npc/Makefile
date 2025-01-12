@@ -16,7 +16,7 @@ sim: $(EXECUTABLE)
 
 $(EXECUTABLE): $(SIM_CPP) $(TOP_V)
 	@echo "Building simulation exexcutable..."
-	@$(VERILATOP) $(CFLAGS) $(SIM_CPP) $(TOP_V) 
+	$(VERILATOP) $(CFLAGS) $(SIM_CPP) $(TOP_V) 
 
 clean:
 	@echo "Cleaning build directory..."
