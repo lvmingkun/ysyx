@@ -26,5 +26,6 @@ wave:
 clean:
 	@echo "Cleaning build directory..."
 	rm -rf $(BUILD_DIR)
+	rm *.fst
 
 include ../Makefile
