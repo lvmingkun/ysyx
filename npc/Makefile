@@ -5,6 +5,7 @@ SIM_CPP = ./csrc/*.cpp
 TOP_V = ./vsrc/*.v
 BUILD_DIR = ./obj_dir
 EXECUTABLE = $(BUILD_DIR)/Vtop
+
 all: sim
 	@echo "Write this Makefile by your self."
 
@@ -16,7 +17,7 @@ sim: $(EXECUTABLE)
 
 $(EXECUTABLE): $(SIM_CPP) $(TOP_V)
 	@echo "Building simulation exexcutable..."
-	$(VERILATOP) $(CFLAGS) $(SIM_CPP) $(TOP_V) 
+	@$(VERILATOP) $(CFLAGS) $(SIM_CPP) $(TOP_V) 
 
 clean:
 	@echo "Cleaning build directory..."
