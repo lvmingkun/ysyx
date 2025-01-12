@@ -1,5 +1,5 @@
 VERILATOR = verilator
-CFLAGS = --cc --exe --build -j 4 -Wall
+VERILATOR_CFLAGS = --build --cc --exe -j 4 -Wall
 
 SIM_CPP = ./csrc/*.cpp
 TOP_V = ./vsrc/*.v
@@ -17,7 +17,7 @@ sim: $(EXECUTABLE)
 
 $(EXECUTABLE): $(SIM_CPP) $(TOP_V)
 	@echo "Building simulation exexcutable..."
-	$(VERILATOP) $(CFLAGS) $(SIM_CPP) $(TOP_V) 
+	$(VERILATOP) $(VERILATOR_CFLAGS) $(SIM_CPP) $(TOP_V) 
 
 clean:
 	@echo "Cleaning build directory..."
