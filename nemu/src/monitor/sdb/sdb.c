@@ -99,7 +99,7 @@ static int cmd_x(char *args) {
 		else {
 			int n = atoi(token1);
 			paddr_t addr = strtol(token2, NULL, 16);
-			if (n <= 0 || addr == 0) {
+			if (n <= 0 || addr < 0x80000000 || addr > 0x87ffffff) {
 				printf("Invalid arguments: N should be positive, EXPR should be a valid address\n");
 				return 0;
 			}
@@ -107,7 +107,7 @@ static int cmd_x(char *args) {
 				printf("Starting from 0x%x:", addr);
 				for (int i = 0; i < n; i++) {
 					word_t data = paddr_read(addr + i * 4, 4);
-					printf("0x%x\t", data);
+					printf("0x%08x\t", data);
 				}
 				printf("\n");
 			}
