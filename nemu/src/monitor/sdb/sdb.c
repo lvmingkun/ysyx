@@ -91,7 +91,7 @@ static struct {
   { "help", "Display information about all supported commands", cmd_help },
   { "c", "Continue the execution of the program", cmd_c },
   { "q", "Exit NEMU", cmd_q },
-	{ "si N", "Execute N instructions, 'N' is optional as a number", cmd_si },
+	{ "si", "Execute N instructions, 'N' is optional as a number", cmd_si },
 	{ "info SUBCMD", "Print registers' status(r) or watchpoints' information(w), 'SUBCMD' is optional as 'r' or 'w'", cmd_info },
 	{ "x N EXPR", "Print N consecutive 4-bytes starting addresses from the result of EXPR in hex", cmd_x },
 	{ "p EXPR", "Print EXPR's value", cmd_p },
