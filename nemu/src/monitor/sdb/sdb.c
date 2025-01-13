@@ -20,6 +20,7 @@
 #include "sdb.h"
 #include <stdlib.h>
 #include <ctype.h>
+#include <memory/paddr.h>
 
 static int is_batch_mode = false;
 
@@ -60,11 +61,11 @@ static int cmd_si(char *args) {
 		cpu_exec(1);
 	}
 	else {
-		if (!isdigit(*args)) {
-			printf("Please choose an integer as your choice!\n");
-		}
+		int n = atoi(args);
+		if (n <= 0) {
+			printf("Please choose an integer(>0) as your choice!\n");
+			}
 		else {
-			int n = atoi(args);
 			cpu_exec(n);
 		}
 	}
@@ -83,10 +84,38 @@ static int cmd_info(char *args) {
 	}
 	return 0;
 }
-static int cmd_x() {
-	printf("fff\n");
+
+static int cmd_x(char *args) {
+	char *token1 = strtok(args, " ");
+	if (token1 == NULL) {
+		return 0;
+	}
+	else {
+		char *token2 = strtok(NULL, " ");
+		if (token2 == NULL) {
+			printf("You should choose a hexadecimal as your option!\n");
+			return 0;
+		}
+		else {
+			int n = atoi(token1);
+			paddr_t addr = strtol(token2, NULL, 16);
+			if (n <= 0 || addr == 0) {
+				printf("Invalid arguments: N should be positive, EXPR should be a valid address\n");
+				return 0;
+			}
+			else {
+				printf("Starting from 0x%x:", addr);
+				for (int i = 0; i < n; i++) {
+					word_t data = paddr_read(addr + i * 4, 4);
+					printf("0x%x\t", data);
+				}
+				printf("\n");
+			}
+		}
+	}
 	return 0;
 }
+
 static int cmd_p() {
 	printf("fff\n");
 	return 0;
