@@ -24,9 +24,10 @@ const char *regs[] = {
 };
 
 void isa_reg_display() {
+	printf("Every register's value as follow:\n"); 
 	for (int i = 0; i < 8; i++) {
 		for (int j = 0; j < 4; j++) {
-			printf("%s : %d\t",reg_name(i * 4 + j), gpr(i * 4 + j));
+			printf("%s  : %d\t",reg_name(i * 4 + j), gpr(i * 4 + j));
 		}
 		printf("\n");
 	}
