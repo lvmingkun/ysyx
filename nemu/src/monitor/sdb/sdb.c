@@ -63,7 +63,7 @@ static int cmd_si(char *args) {
 	else {
 		int n = atoi(args);
 		if (n <= 0) {
-			printf("Please choose an integer(>0) as your choice!\n");
+			printf("Please choose an integer(>0) as your choice!");
 			}
 		else {
 			cpu_exec(n);
@@ -77,10 +77,10 @@ static int cmd_info(char *args) {
 		isa_reg_display();
 	}
 	else if (args[0] == 'w') {
-		printf("no define\n");
+		printf("no define");
 	}
 	else {
-		printf("You should choose 'r' or 'w' as your option!\n");
+		printf("You should choose 'r' or 'w' as your option!");
 	}
 	return 0;
 }
@@ -93,14 +93,17 @@ static int cmd_x(char *args) {
 	else {
 		char *token2 = strtok(NULL, " ");
 		if (token2 == NULL) {
-			printf("You should choose a hexadecimal as your option!\n");
+			printf("You should choose a hexadecimal as your option!");
 			return 0;
 		}
 		else {
 			int n = atoi(token1);
+			if (token2[0] == '0' && (token2[1] == 'X' || token2[1] == 'x')) {
+				token2+=2;
+			}
 			paddr_t addr = strtol(token2, NULL, 16);
 			if (n <= 0 || addr < 0x80000000 || addr > 0x87ffffff) {
-				printf("Invalid arguments: N should be positive, EXPR should be a valid address\n");
+				printf("Invalid arguments: N should be positive, EXPR should be a valid address!");
 				return 0;
 			}
 			else {
