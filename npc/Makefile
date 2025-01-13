@@ -1,31 +1,67 @@
+TOPNAME = top
+NXDC_FILES = constr/top.nxdc
+INC_PATH ?=
 
 VERILATOR = verilator
-VERILATOR_CFLAGS = --build --cc --exe -j 4 -Wall --trace-fst  --top-module top
+VERILATOR_CFLAGS += -MMD --build -cc  \
+				-O3 --x-assign fast --x-initial fast --noassert
 
-SIM_CPP = ./csrc/*.cpp
-TOP_V = ./vsrc/*.v
-BUILD_DIR = ./obj_dir
-EXECUTABLE = $(BUILD_DIR)/Vtop
+BUILD_DIR = ./build
+OBJ_DIR = $(BUILD_DIR)/obj_dir
+BIN = $(BUILD_DIR)/$(TOPNAME)
 
-all: sim
-	@echo "Write this Makefile by your self."
+default: $(BIN)
+
+$(shell mkdir -p $(BUILD_DIR))
+
+# constraint file
+SRC_AUTO_BIND = $(abspath $(BUILD_DIR)/auto_bind.cpp)
+$(SRC_AUTO_BIND): $(NXDC_FILES)
+	python3 $(NVBOARD_HOME)/scripts/auto_pin_bind.py $^ $@
+
+# project source
+VSRCS = $(shell find $(abspath ./vsrc) -name "*.v")
+CSRCS = $(shell find $(abspath ./csrc) -name "*.c" -or -name "*.cc" -or -name "*.cpp")
+CSRCS += $(SRC_AUTO_BIND)
+
+# rules for NVBoard
+include $(NVBOARD_HOME)/scripts/nvboard.mk
+
+# rules for verilator
+INCFLAGS = $(addprefix -I, $(INC_PATH))
+CXXFLAGS += $(INCFLAGS) -DTOP_NAME="\"V$(TOPNAME)\""
+
+$(BIN): $(VSRCS) $(CSRCS) $(NVBOARD_ARCHIVE)
+	@rm -rf $(OBJ_DIR)
+	$(VERILATOR) $(VERILATOR_CFLAGS) \
+		--top-module $(TOPNAME) $^ \
+		$(addprefix -CFLAGS , $(CXXFLAGS)) $(addprefix -LDFLAGS , $(LDFLAGS)) \
+		--Mdir $(OBJ_DIR) --exe -o $(abspath $(BIN))
+
+all: default
+
+run: $(BIN)
+	@$^
+
+clean:
+	rm -rf $(BUILD_DIR)
+	rm -f *.vcd
+	rm -f *.fst
+
+.PHONY: default all clean run
+
+EXECUTABLE = $(OBJ_DIR)/Vtop
 
 sim: $(EXECUTABLE)
 	$(call git_commit, "sim RTL") # DO NOT REMOVE THIS LINE!!!
-	@echo "Write this Makefile by your self."
 	@echo "Running simulation..."
 	$(EXECUTABLE)
 
-$(EXECUTABLE): $(SIM_CPP) $(TOP_V)
+$(EXECUTABLE): $(CSRCS) $(VSRCS)
 	@echo "Building simulation exexcutable..."
-	$(VERILATOR) $(VERILATOR_CFLAGS) $(SIM_CPP) $(TOP_V) 
+	$(VERILATOR) $(VERILATOR_CFLAGS) $(CSRCS) $(VSRCS) 
 
 wave:
 	gtkwave wave.fst
-
-clean:
-	@echo "Cleaning build directory..."
-	rm -rf $(BUILD_DIR)
-	rm *.fst
 
 include ../Makefile

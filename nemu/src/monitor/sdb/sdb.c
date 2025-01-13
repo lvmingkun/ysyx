@@ -18,6 +18,7 @@
 #include <readline/readline.h>
 #include <readline/history.h>
 #include "sdb.h"
+#include <stdlib.h>
 
 static int is_batch_mode = false;
 
@@ -53,6 +54,33 @@ static int cmd_q(char *args) {
   return -1;
 }
 
+static int cmd_si(char *args) {
+  if (args == NULL) {
+		cpu_exec(1);
+	}
+	else {
+		int n = atoi(args);
+		cpu_exec(n);
+	}
+	return 0;
+}
+
+static int cmd_info() {
+	return 0;
+}
+static int cmd_x() {
+	return 0;
+}
+static int cmd_p() {
+	return 0;
+}
+static int cmd_w() {
+	return 0;
+}
+static int cmd_d() {
+	return 0;
+}
+
 static int cmd_help(char *args);
 
 static struct {
@@ -63,6 +91,12 @@ static struct {
   { "help", "Display information about all supported commands", cmd_help },
   { "c", "Continue the execution of the program", cmd_c },
   { "q", "Exit NEMU", cmd_q },
+	{ "si N", "Execute N instructions, 'N' is optional as a number", cmd_si },
+	{ "info SUBCMD", "Print registers' status(r) or watchpoints' information(w), 'SUBCMD' is optional as 'r' or 'w'", cmd_info },
+	{ "x N EXPR", "Print N consecutive 4-bytes starting addresses from the result of EXPR in hex", cmd_x },
+	{ "p EXPR", "Print EXPR's value", cmd_p },
+	{ "w EXPR", "The program will stop if EXPR changes", cmd_w },
+	{ "d N", "Delete the watchpoint:N", cmd_d }
 
   /* TODO: Add more commands */
 
