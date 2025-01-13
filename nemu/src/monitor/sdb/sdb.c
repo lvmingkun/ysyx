@@ -19,6 +19,7 @@
 #include <readline/history.h>
 #include "sdb.h"
 #include <stdlib.h>
+#include <ctype.h>
 
 static int is_batch_mode = false;
 
@@ -59,25 +60,45 @@ static int cmd_si(char *args) {
 		cpu_exec(1);
 	}
 	else {
-		int n = atoi(args);
-		cpu_exec(n);
+		if (!isdigit(*args)) {
+			printf("Please choose an integer as your choice!\n");
+		}
+		else {
+			int n = atoi(args);
+			cpu_exec(n);
+		}
 	}
 	return 0;
 }
 
-static int cmd_info() {
+static int cmd_info(char *args) {
+	if (args[0] == 'r') {
+		isa_reg_display();
+	}
+	else if (args[0] == 'w') {
+		printf("no define\n");
+	}
+	else {
+		printf("You should choose 'r' or 'w' as your option!\n");
+	}
 	return 0;
 }
 static int cmd_x() {
+	printf("fff\n");
 	return 0;
 }
 static int cmd_p() {
+	printf("fff\n");
 	return 0;
 }
 static int cmd_w() {
+	printf("fff\n");
+
 	return 0;
 }
 static int cmd_d() {
+	printf("fff\n");
+
 	return 0;
 }
 
@@ -92,11 +113,11 @@ static struct {
   { "c", "Continue the execution of the program", cmd_c },
   { "q", "Exit NEMU", cmd_q },
 	{ "si", "Execute N instructions, 'N' is optional as a number", cmd_si },
-	{ "info SUBCMD", "Print registers' status(r) or watchpoints' information(w), 'SUBCMD' is optional as 'r' or 'w'", cmd_info },
-	{ "x N EXPR", "Print N consecutive 4-bytes starting addresses from the result of EXPR in hex", cmd_x },
-	{ "p EXPR", "Print EXPR's value", cmd_p },
-	{ "w EXPR", "The program will stop if EXPR changes", cmd_w },
-	{ "d N", "Delete the watchpoint:N", cmd_d }
+	{ "info", "Print registers' status(r) or watchpoints' information(w), 'SUBCMD' is optional as 'r' or 'w'", cmd_info },
+	{ "x", "Print N consecutive 4-bytes starting addresses from the result of EXPR in hex", cmd_x },
+	{ "p", "Print EXPR's value", cmd_p },
+	{ "w", "The program will stop if EXPR changes", cmd_w },
+	{ "d", "Delete the watchpoint:N", cmd_d }
 
   /* TODO: Add more commands */
 
