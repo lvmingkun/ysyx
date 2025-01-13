@@ -107,12 +107,12 @@ static int cmd_x(char *args) {
 				return 0;
 			}
 			else {
-				printf("Starting from 0x%x to read %d addresses' information:\n", addr, n);
+				printf("Starting from 0x%x to read %d addresses' information:", addr, n);
 				for (int i = 0; i < n; i++) {
-					word_t data = paddr_read(addr + i * 4, 4);
-					printf("0x%08x\t", data);
 					if (i % 5 == 0)
 						printf("\n");
+					word_t data = paddr_read(addr + i * 4, 4);
+					printf("0x%08x\t", data);
 				}
 			}
 			printf("\n");
