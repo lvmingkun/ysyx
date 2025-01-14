@@ -122,7 +122,6 @@ static bool make_token(char *e) {
       return false;
     }
   }
-	printf("%d\n", nr_token);
   return true;
 }
 
@@ -165,6 +164,8 @@ int find_op(int p, int q) {
 
 
 word_t eval(int p, int q, bool *success) {
+printf("%d : %d\n", p, q);
+
 	if (p > q) {
 		return 0;
 	}
