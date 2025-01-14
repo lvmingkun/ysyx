@@ -169,11 +169,8 @@ word_t eval(int p, int q, bool *success) {
 		return 0;
 	}
 	else if (p == q) {
-		printf("%d\n", tokens[p].type);
-		printf("%d\n", TK_NUM);
 		if (tokens[p].type == TK_NUM) {
 			*success = true;
-			printf("???\n");
 			return atoi(tokens[p].str);
 		}
 		return 0;
@@ -183,6 +180,7 @@ word_t eval(int p, int q, bool *success) {
 		return eval(p + 1, q - 1, success);
 	}
 	else {
+		printf("??\n");
 		if (!qs) return 0;
 		int op = find_op(p, q);
 		bool success1 = false;
