@@ -186,11 +186,11 @@ word_t eval(int p, int q, bool *success) {
 		return eval(p + 1, q - 1, success);
 	}
 	else {
-		printf("??\n");
-		if (!qs) return 0;
-		printf("ddd");
+		if (!qs) {
+			printf("ddad\n");
+			return 0;
+		}
 		int op = find_op(p, q);
-		printf("csfsd");
 		bool success1 = false;
 		bool success2 = false;
 	  word_t val1 = eval(p, op - 1, &success1);
