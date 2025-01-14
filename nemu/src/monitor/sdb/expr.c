@@ -147,6 +147,7 @@ bool check_parentheses(int p, int q, bool *qs) {
 }
 
 int find_op(int p, int q) {
+	printf("hhhh");
 	int precedence[128];
 	for (int i = 0; i < 128; i++) {
 		precedence[i] = 0;
