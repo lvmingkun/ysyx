@@ -126,25 +126,32 @@ static bool make_token(char *e) {
 }
 
 bool check_parentheses(int p, int q, bool *qs) {
-	int n = 0;
-	bool one = false;
-	if (tokens[p].type == '(' && tokens[q].type != ')') {
+	if (tokens[p].type != '(' || tokens[q].type != ')') {
+		return false;
+	}
+	else {
+		int s1 = 0;
+		int s2 = 0;
+		p+=1;
+		q-=1;
+		while (p < q) {
+			if (tokens[p].type == '(') s1++;
+			if (tokens[q].type == ')') s2++;
+			if (tokens[p].type == ')') {
+				if (s1 == 0) return false;
+				s1--;
+			}
+			if (tokens[q].type == '(') {
+				if (s2 == 0) return false;
+				s2--;
+			}
+			p++;
+			q--;
+		}
+		if (s1 == s2) return true;
 		*qs = false;
 		return false;
 	}
-	while (p <= q) {
-		if (tokens[p].type == '(') {
-			n++;
-			if (!one) one = true;
-		}
-		if (tokens[p].type == ')') n--;
-		p++;
-	}
-	if (one && n == 0) return true;
-	if (!one) return false;
-	printf("???\n");
-	*qs = false;
-	return false;
 }
 
 int find_op(int p, int q) {
