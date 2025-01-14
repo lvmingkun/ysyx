@@ -179,6 +179,7 @@ int find_op(int p, int q) {
 		}
 		t++;
 	}
+	printf("\n");
 	return p;
 }
 
