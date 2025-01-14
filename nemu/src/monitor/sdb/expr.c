@@ -149,7 +149,7 @@ bool check_parentheses(int p, int q, bool *qs) {
 			q--;
 			if (p == q) {
 				if (tokens[p].type == '(') s1++;
-				if (tokens[p].type == ')') s1--;
+				if (tokens[p].type == ')') s2++;
 			}
 		}
 		if (s1 == s2) return true;
@@ -160,6 +160,7 @@ bool check_parentheses(int p, int q, bool *qs) {
 
 int find_op(int p, int q) {
 	int t = p + 1;
+	bool par = false;
 	int precedence[128];
 	for (int i = 0; i < 128; i++) {
 		precedence[i] = 0;
@@ -170,7 +171,9 @@ int find_op(int p, int q) {
 	precedence['/'] = 1;
 
 	while (t < q) {
-		if (precedence[tokens[p].type] <= precedence[tokens[t].type]) { 
+		if (tokens[t].type == '(') par = true;
+		if (tokens[t].type == ')') par = false;
+		if (!par || precedence[tokens[p].type] <= precedence[tokens[t].type]) {	
 			p = t;
 		}
 		t++;
