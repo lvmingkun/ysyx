@@ -188,7 +188,9 @@ word_t eval(int p, int q, bool *success) {
 	else {
 		printf("??\n");
 		if (!qs) return 0;
+		printf("ddd");
 		int op = find_op(p, q);
+		printf("csfsd");
 		bool success1 = false;
 		bool success2 = false;
 	  word_t val1 = eval(p, op - 1, &success1);
