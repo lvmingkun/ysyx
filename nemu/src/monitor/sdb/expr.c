@@ -157,8 +157,8 @@ int find_op(int p, int q) {
 	precedence['*'] = 1;
 	precedence['/'] = 1;
 
-	while (p < q) {
-		if (precedence[tokens[p].type] <= precedence[tokens[t].type]) {
+	while (p < q || t < q) {
+		if (precedence[tokens[p].type] <= precedence[tokens[t].type]) { 
 			p = t;
 		}
 		t++;
