@@ -157,9 +157,10 @@ int find_op(int p, int q) {
 	precedence['*'] = 1;
 	precedence['/'] = 1;
 
-	while (p < q || t < q) {
+	while (t < q) {
 		if (precedence[tokens[p].type] <= precedence[tokens[t].type]) { 
 			p = t;
+			printf("%d\n", t);
 		}
 		t++;
 	}
