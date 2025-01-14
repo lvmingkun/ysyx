@@ -122,9 +122,9 @@ static int cmd_x(char *args) {
 }
 
 static int cmd_p(char *args) {
-	bool *success = false;
-	word_t value = expr(args, success);
-  if (*success == false) {
+	bool success = false;
+	word_t value = expr(args, &success);
+  if (success == false) {
 		printf("Sorry, can't calculate the expression, please try to change format!\n");
 	}
 	else {
