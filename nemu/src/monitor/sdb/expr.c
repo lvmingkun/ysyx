@@ -190,11 +190,14 @@ word_t eval(int p, int q, bool *success) {
 			*success = true;
 			return atoi(tokens[p].str);
 		}
+		if (tokens[p].type == '-') {
+			return -1;
+		}
 		return 0;
 	}
 	bool qs = true;
 	if (check_parentheses(p, q, &qs) == true) {
-		Log("Matching () successfully!\n"); 
+		Log("Matching () successfully!"); 
 		return eval(p + 1, q - 1, success);
 	}
 	else {
@@ -212,7 +215,11 @@ word_t eval(int p, int q, bool *success) {
 	  switch (op_type) {
 			case '+': if (!success1) return val2;
 									return val1 + val2;
-			case '-': if (!success1) return -val2;
+			case '-': if (!success1) {
+									val2 = -val2;
+								  if (val1 == -1)	return -val2;
+									return val2;
+								}
 									return val1 - val2;
 			case '*': return val1 * val2;
 			case '/': return val1 / val2;
