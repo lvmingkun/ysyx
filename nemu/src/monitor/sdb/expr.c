@@ -114,7 +114,6 @@ static bool make_token(char *e) {
 						nr_token++;
 						break;
         }
-
         break;
       }
     }
@@ -124,7 +123,6 @@ static bool make_token(char *e) {
       return false;
     }
   }
-  printf("%d\n", nr_token);
   return true;
 }
 
@@ -213,5 +211,5 @@ word_t expr(char *e, bool *success) {
   }
   /* TODO: Insert codes to evaluate the expression. */
   // TODO();
-	return eval(0, nr_token - 2, success);
+	return eval(0, nr_token - 1, success);
 }
