@@ -163,7 +163,6 @@ int find_op(int p, int q) {
 				break;
 			}
 		}
-		p++;
 	}
 	return p;
 }
