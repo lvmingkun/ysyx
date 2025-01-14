@@ -166,7 +166,7 @@ int find_op(int p, int q) {
 
 
 word_t eval(int p, int q, bool *success) {
-	Log("cccs");
+	Log("cccs%dcc%d", p, q);
 	if (p > q) {
 		return 0;
 	}
