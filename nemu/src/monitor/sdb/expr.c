@@ -205,7 +205,7 @@ word_t eval(int p, int q, bool *success) {
 			return 0;
 		}
 		int op = find_op(p, q);
-		printf("hhh\n");
+		printf("%d\n", op);
 		bool success1 = false;
 		bool success2 = false;
 	  word_t val1 = eval(p, op - 1, &success1);
