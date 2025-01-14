@@ -59,7 +59,6 @@ void init_regex() {
   int i;
   char error_msg[128];
   int ret;
-  Log("hhhh");
   for (i = 0; i < NR_REGEX; i ++) {
     ret = regcomp(&re[i], rules[i].regex, REG_EXTENDED);
     if (ret != 0) {
@@ -167,6 +166,7 @@ int find_op(int p, int q) {
 
 
 word_t eval(int p, int q, bool *success) {
+	Log("cccs");
 	if (p > q) {
 		return 0;
 	}
