@@ -18,6 +18,9 @@
 #include <readline/readline.h>
 #include <readline/history.h>
 #include "sdb.h"
+#include <stdlib.h>
+#include <ctype.h>
+#include <memory/paddr.h>
 
 static int is_batch_mode = false;
 
@@ -49,7 +52,96 @@ static int cmd_c(char *args) {
 
 
 static int cmd_q(char *args) {
+  nemu_state.state = NEMU_QUIT;
   return -1;
+}
+
+static int cmd_si(char *args) {
+  if (args == NULL) {
+		cpu_exec(1);
+	}
+	else {
+		int n = atoi(args);
+		if (n <= 0) {
+			printf("Please choose an integer(>0) as your choice!");
+			}
+		else {
+			cpu_exec(n);
+		}
+	}
+	return 0;
+}
+
+static int cmd_info(char *args) {
+	if (args[0] == 'r') {
+		isa_reg_display();
+	}
+	else if (args[0] == 'w') {
+		printf("no define");
+	}
+	else {
+		printf("You should choose 'r' or 'w' as your option!");
+	}
+	return 0;
+}
+
+static int cmd_x(char *args) {
+	char *token1 = strtok(args, " ");
+	if (token1 == NULL) {
+		return 0;
+	}
+	else {
+		char *token2 = strtok(NULL, " ");
+		if (token2 == NULL) {
+			printf("You should choose a hexadecimal as your option!");
+			return 0;
+		}
+		else {
+			int n = atoi(token1);
+			if (token2[0] == '0' && (token2[1] == 'X' || token2[1] == 'x')) {
+				token2+=2;
+			}
+			paddr_t addr = strtol(token2, NULL, 16);
+			if (n <= 0 || addr < 0x80000000 || addr > 0x87ffffff) {
+				printf("Invalid arguments: N should be positive, EXPR should be a valid address!");
+				return 0;
+			}
+			else {
+				printf("Starting from 0x%x to read %d addresses' information:", addr, n);
+				for (int i = 0; i < n; i++) {
+					if (i % 5 == 0)
+						printf("\n");
+					word_t data = paddr_read(addr + i * 4, 4);
+					printf("0x%08x\t", data);
+				}
+			}
+			printf("\n");
+		}
+	}
+	return 0;
+}
+
+static int cmd_p(char *args) {
+	bool success = false;
+	word_t value = expr(args, &success);
+  if (success == false) {
+		printf("Sorry, can't calculate the expression, please try to change format!\n");
+	}
+	else {
+	printf("Expression's result is %d\n", value);
+	}	
+	return 0;
+}
+
+static int cmd_w() {
+	printf("fff\n");
+
+	return 0;
+}
+static int cmd_d() {
+	printf("fff\n");
+
+	return 0;
 }
 
 static int cmd_help(char *args);
@@ -62,6 +154,12 @@ static struct {
   { "help", "Display information about all supported commands", cmd_help },
   { "c", "Continue the execution of the program", cmd_c },
   { "q", "Exit NEMU", cmd_q },
+	{ "si", "Execute N instructions, 'N' is optional as a number", cmd_si },
+	{ "info", "Print registers' status(r) or watchpoints' information(w), 'SUBCMD' is optional as 'r' or 'w'", cmd_info },
+	{ "x", "Print N consecutive 4-bytes starting addresses from the result of EXPR in hex", cmd_x },
+	{ "p", "Print EXPR's value", cmd_p },
+	{ "w", "The program will stop if EXPR changes", cmd_w },
+	{ "d", "Delete the watchpoint:N", cmd_d }
 
   /* TODO: Add more commands */
 
