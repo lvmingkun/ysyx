@@ -84,6 +84,7 @@ static bool make_token(char *e) {
   nr_token = 0;
 
   while (e[position] != '\0') {
+		printf("%d\n", nr_token);
     /* Try all rules one by one. */
     for (i = 0; i < NR_REGEX; i ++) {
       if (regexec(&re[i], e + position, 1, &pmatch, 0) == 0 && pmatch.rm_so == 0) {
@@ -108,11 +109,9 @@ static bool make_token(char *e) {
 						strncpy(tokens[nr_token].str, substr_start, substr_len);
 					 	tokens[nr_token].str[substr_len] = '\0';
 						nr_token++;
-						printf("%d", nr_token);
           default:
 						tokens[nr_token].type = rules[i].token_type;
 						nr_token++;
-						printf("%d", nr_token);
 						break;
         }
 
@@ -168,7 +167,6 @@ int find_op(int p, int q) {
 
 
 word_t eval(int p, int q, bool *success) {
-	Log("cccs%dcc%d", nr_token, q);
 	if (p > q) {
 		return 0;
 	}
@@ -213,7 +211,6 @@ word_t expr(char *e, bool *success) {
     *success = false;
     return 0;
   }
-	printf("%d", nr_token);
   /* TODO: Insert codes to evaluate the expression. */
   // TODO();
 	return eval(0, nr_token - 2, success);
