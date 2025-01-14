@@ -163,6 +163,9 @@ int find_op(int p, int q) {
 				p = i;
 				break;
 			}
+			else {
+				p++;
+			}
 		}
 	}
 	printf("%d\n", p);
@@ -187,7 +190,6 @@ word_t eval(int p, int q, bool *success) {
 	}
 	else {
 		if (!qs) {
-			printf("ddad\n");
 			return 0;
 		}
 		int op = find_op(p, q);
