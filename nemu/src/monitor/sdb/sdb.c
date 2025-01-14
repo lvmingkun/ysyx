@@ -20,7 +20,6 @@
 #include "sdb.h"
 #include <stdlib.h>
 #include <ctype.h>
-#include <memory/paddr.h>
 
 static int is_batch_mode = false;
 
@@ -86,38 +85,6 @@ static int cmd_info(char *args) {
 }
 
 static int cmd_x(char *args) {
-	char *token1 = strtok(args, " ");
-	if (token1 == NULL) {
-		return 0;
-	}
-	else {
-		char *token2 = strtok(NULL, " ");
-		if (token2 == NULL) {
-			printf("You should choose a hexadecimal as your option!");
-			return 0;
-		}
-		else {
-			int n = atoi(token1);
-			if (token2[0] == '0' && (token2[1] == 'X' || token2[1] == 'x')) {
-				token2+=2;
-			}
-			paddr_t addr = strtol(token2, NULL, 16);
-			if (n <= 0 || addr < 0x80000000 || addr > 0x87ffffff) {
-				printf("Invalid arguments: N should be positive, EXPR should be a valid address!");
-				return 0;
-			}
-			else {
-				printf("Starting from 0x%x to read %d addresses' information:", addr, n);
-				for (int i = 0; i < n; i++) {
-					if (i % 5 == 0)
-						printf("\n");
-					word_t data = paddr_read(addr + i * 4, 4);
-					printf("0x%08x\t", data);
-				}
-			}
-			printf("\n");
-		}
-	}
 	return 0;
 }
 
