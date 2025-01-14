@@ -127,16 +127,21 @@ static bool make_token(char *e) {
 
 bool check_parentheses(int p, int q, bool *qs) {
 	int n = 0;
+	bool one = false;
 	if (tokens[p].type == '(' && tokens[q].type != ')') {
 		*qs = false;
 		return false;
 	}
 	while (p <= q) {
-		if (tokens[p].type == '(') n++;
+		if (tokens[p].type == '(') {
+			n++;
+			if (!one) one = true;
+		}
 		if (tokens[q].type == ')') n--;
 		p++;
 	}
-	if (n == 0) return true;
+	if (one && n == 0) return true;
+	if (!one) return false;
 	*qs = false;
 	return false;
 }
@@ -164,13 +169,10 @@ int find_op(int p, int q) {
 
 
 word_t eval(int p, int q, bool *success) {
-printf("%d : %d\n", p, q);
-
 	if (p > q) {
 		return 0;
 	}
 	else if (p == q) {
-		printf("%d : %d\n", p, q);
 		if (tokens[p].type == TK_NUM) {
 			*success = true;
 			return atoi(tokens[p].str);
