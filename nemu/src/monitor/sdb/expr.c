@@ -59,7 +59,7 @@ void init_regex() {
   int i;
   char error_msg[128];
   int ret;
-
+  Log("hhhh");
   for (i = 0; i < NR_REGEX; i ++) {
     ret = regcomp(&re[i], rules[i].regex, REG_EXTENDED);
     if (ret != 0) {
@@ -212,6 +212,6 @@ word_t expr(char *e, bool *success) {
     return 0;
   }
   /* TODO: Insert codes to evaluate the expression. */
-  TODO();
+  // TODO();
 	return eval(0, nr_token - 1, success);
 }
