@@ -160,14 +160,11 @@ int find_op(int p, int q) {
 	while (t < q) {
 		if (precedence[tokens[p].type] <= precedence[tokens[t].type]) { 
 			p = t;
-			printf("%d\n", t);
 		}
 		t++;
 	}
-	printf("%d\n", p);
 	return p;
 }
-
 
 word_t eval(int p, int q, bool *success) {
 	if (p > q) {
@@ -182,6 +179,7 @@ word_t eval(int p, int q, bool *success) {
 	}
 	bool qs = true;
 	if (check_parentheses(p, q, &qs) == true) {
+		Log("Matching () successfully!\n"); 
 		return eval(p + 1, q - 1, success);
 	}
 	else {
