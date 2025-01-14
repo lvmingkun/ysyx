@@ -121,10 +121,18 @@ static int cmd_x(char *args) {
 	return 0;
 }
 
-static int cmd_p() {
-	printf("fff\n");
+static int cmd_p(char *args) {
+	bool *success = false;
+	word_t value = expr(args, success);
+  if (*success == false) {
+		printf("Sorry, can't calculate the expression, please try to change format!\n");
+	}
+	else {
+	printf("Expression's result is %d\n", value);
+	}	
 	return 0;
 }
+
 static int cmd_w() {
 	printf("fff\n");
 
