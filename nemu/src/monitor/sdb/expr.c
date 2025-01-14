@@ -169,9 +169,10 @@ word_t eval(int p, int q, bool *success) {
 		return 0;
 	}
 	else if (p == q) {
+		printf("%d\n", tokens[p].type);
+		printf("%d\n", TK_NUM);
 		if (tokens[p].type == TK_NUM) {
 			*success = true;
-			printf("%d", tokens[p].type);
 			return atoi(tokens[p].str);
 		}
 		return 0;
