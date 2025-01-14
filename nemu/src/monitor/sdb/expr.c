@@ -175,7 +175,6 @@ int find_op(int p, int q) {
 		if (tokens[t].type == ')') par = false;
 		if (!par && precedence[tokens[p].type] <= precedence[tokens[t].type]) {	
 			p = t;
-			printf("%d\n", p);
 		}
 		t++;
 	}
@@ -206,7 +205,6 @@ word_t eval(int p, int q, bool *success) {
 			return 0;
 		}
 		int op = find_op(p, q);
-		printf("%d\n", op);
 		bool success1 = false;
 		bool success2 = false;
 	  word_t val1 = eval(p, op - 1, &success1);
