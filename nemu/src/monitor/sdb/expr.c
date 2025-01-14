@@ -129,6 +129,7 @@ bool check_parentheses(int p, int q, bool *qs) {
 	int n = 0;
 	bool one = false;
 	if (tokens[p].type == '(' && tokens[q].type != ')') {
+		printf("no\n");
 		*qs = false;
 		return false;
 	}
@@ -142,6 +143,7 @@ bool check_parentheses(int p, int q, bool *qs) {
 	}
 	if (one && n == 0) return true;
 	if (!one) return false;
+	printf("???\n");
 	*qs = false;
 	return false;
 }
