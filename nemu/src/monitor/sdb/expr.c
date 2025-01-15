@@ -159,7 +159,7 @@ bool check_parentheses(int p, int q, bool *qs) {
 }
 
 int find_op(int p, int q) {
-	int t = p;
+	int t = p + 1;
 	int op = p;
 	bool par = false;
 	int precedence[128] = {0};
@@ -173,9 +173,9 @@ int find_op(int p, int q) {
 		if (tokens[t].type == '(') par = true;
 		if (tokens[t].type == ')') par = false;
 
-		if (!par && precedence[tokens[op].type] <= precedence[tokens[t+1].type]){
-			op = t + 1;
-			printf("%d  %d\n", op, t + 1);
+		if (!par && precedence[tokens[op].type] <= precedence[tokens[t].type]){
+			op = t;
+			printf("%d  %d\n", op, t);
 		}
 		t++;
 	}
