@@ -161,7 +161,7 @@ bool check_parentheses(int p, int q, bool *qs) {
 int find_op(int p, int q) {
 	int t = p + 1;
 	bool par = false;
-	int precedence[128] = {0};
+	int precedence[272] = {0};
 	// printf("%d  %d\n", t, op);
 
 	precedence['+'] = 2;
