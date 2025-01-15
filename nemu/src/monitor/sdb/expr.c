@@ -173,7 +173,7 @@ int find_op(int p, int q) {
 		if (tokens[t].type == '(') par = true;
 		if (tokens[t].type == ')') par = false;
 
-		if (!par && precedence[tokens[op].type] >= precedence[tokens[t].type]) { 				op = t;
+		if (!par && precedence[tokens[op].type] <= precedence[tokens[t].type]) { 				op = t;
 			  printf("%d  %d\n", op, t);
 				}
 		t++;
