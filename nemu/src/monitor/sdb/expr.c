@@ -159,32 +159,28 @@ bool check_parentheses(int p, int q, bool *qs) {
 }
 
 int find_op(int p, int q) {
-	int op = -1;
-	int paren_level = 0;
+	int t = p + 1;
+	bool par = false;
 	int precedence[128] = {0};
+	// printf("%d  %d\n", t, op);
 
 	precedence['+'] = 2;
 	precedence['-'] = 2;
 	precedence['*'] = 1;
 	precedence['/'] = 1;
 
-	for (int t = p; t <= q; t++) {
-		if (tokens[t].type == '(') {
-			paren_level++;
-		} else if (tokens[t].type == ')') {
-			paren_level--;
-		}
+	while (t <= q) {
+		if (tokens[t].type == '(') par = true;
+		if (tokens[t].type == ')') par = false;
 
-		if (paren_level == 0 && precedence[tokens[t].type] > 0) {
-			if (op == -1 || precedence[tokens[t].type] >= precedence[tokens[op].type]) {
-				op = t;
-			}
+		if (!par && precedence[tokens[p].type] <= precedence[tokens[t].type]){
+			p = t;
+			// printf("%d  %d  %d\n", p, t, q);
 		}
+		t++;
 	}
-	if (op == -1) {
-		printf("No valid operator found between %d and %d\n", p, q);
-	}
-	return op;
+	printf("\n");
+	return p;
 }
 
 word_t eval(int p, int q, bool *success) {
