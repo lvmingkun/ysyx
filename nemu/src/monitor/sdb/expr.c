@@ -163,6 +163,7 @@ int find_op(int p, int q) {
 	int op = p;
 	bool par = false;
 	int precedence[128] = {0};
+	printf("%d  %d\n", t, op);
 
 	precedence['+'] = 2;
 	precedence['-'] = 2;
