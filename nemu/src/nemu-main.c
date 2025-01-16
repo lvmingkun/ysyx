@@ -37,9 +37,9 @@ int main(int argc, char *argv[]) {
 
 /* test expr. */
   FILE *file;
-	char line[MAX_LINE_LENGTH];
-	char value[12];
-	char expre[MAX_LINE_LENGTH - 12];
+	char line[MAX_LINE_LENGTH] = {};
+	char value[12] = {};
+	char expre[MAX_LINE_LENGTH - 12] = {};
 	file = fopen("tools/gen-expr/input", "r");
 	if (file == NULL) {
 		perror("Failed to open file");
