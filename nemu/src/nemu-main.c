@@ -19,7 +19,7 @@
 #include <stdlib.h>
 #include "monitor/sdb/sdb.h"
 
-#define MAX_LINE_LENGTH 512
+#define MAX_LINE_LENGTH 256
 
 void init_monitor(int, char *[]);
 void am_init_monitor();
