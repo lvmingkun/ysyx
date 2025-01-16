@@ -149,6 +149,7 @@ bool check_parentheses(int p, int q, bool *qs) {
 				if (tokens[p].type == '(') s1++;
 				if (tokens[p].type == ')') s2++;
 			}
+			if (p > q) break;
 		}
 		if (s1 == s2) return true;
 		*qs = false;
