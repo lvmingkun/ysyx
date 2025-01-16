@@ -46,6 +46,7 @@ int main(int argc, char *argv[]) {
     return 1;
 	}
 	int success_num = 0;
+	int num = 0;
 
 	while (fgets(line, sizeof(line), file) != NULL) {
 		line[strcspn(line, "\n")] = '\0';
@@ -53,7 +54,7 @@ int main(int argc, char *argv[]) {
 			bool success = false;
 			word_t valid_value = expr(expre, &success);
 			if (success && valid_value == atoi(value)) {
-				printf("The %d expression %s calculate successfully\n", success_num, expre);
+				printf("The %d expression %s calculate successfully\n", num, expre);
 				success_num++;
 			} else {
 				printf("The expression %s calculate unsuccessfully\n", expre);
