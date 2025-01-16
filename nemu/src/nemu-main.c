@@ -53,7 +53,7 @@ int main(int argc, char *argv[]) {
 			bool success = false;
 			word_t valid_value = expr(expre, &success);
 			if (success && valid_value == atoi(value)) {
-				// printf("The %d expression %s calculate successfully\n", success_num, expre);
+				printf("The %d expression %s calculate successfully\n", success_num, expre);
 				success_num++;
 			} else {
 				printf("The expression %s calculate unsuccessfully\n", expre);
