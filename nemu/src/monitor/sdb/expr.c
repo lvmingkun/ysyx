@@ -132,8 +132,6 @@ bool check_parentheses(int p, int q, bool *qs) {
 	else {
 		int s1 = 0;
 		int s2 = 0;
-		p+=1;
-		q-=1;
 		while (p < q) {
 			if (tokens[p].type == '(') s1++;
 			if (tokens[q].type == ')') s2++;
