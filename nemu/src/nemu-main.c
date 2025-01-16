@@ -62,6 +62,7 @@ int main(int argc, char *argv[]) {
 		} else {
 			printf("Line format incorrect: %s\n", line);
 		}
+		num++;
 	}
 
 	printf("Pass %d / 10160  expressions successfully\n", success_num); 
