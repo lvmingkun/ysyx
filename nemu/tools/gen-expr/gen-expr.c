@@ -44,13 +44,11 @@ static char nonnull = 'a';
 
 uint32_t choose(uint32_t n) {
 	uint32_t random_num = (uint32_t) (rand() % n);
-	// printf("rec %d choose %d\n", renum, random_num);
 	return random_num;
 }
 
 static void gen_num() {
 	if (nonnull == ')') {
-		// printf("rec %d, have ) can't gen num, return!\n", renum);
 		return;
 	}
 	int len = rand() % 4 + 1;
@@ -59,28 +57,23 @@ static void gen_num() {
 			char random_char = (rand() % 10) + '0';
 			if ((len > 1) && (i == 0) && (random_char == '0')) {
 				random_char = '1';
-				// printf("0 head,it will add 1 to be %c\n", random_char);
 			}
 			if (zflag && len == 1 && random_char == '0') {
 				random_char = '1';
-				// printf(" gen 0 but dev 0,add 1 to be %c\n", random_char);
 			}	
 			buf[flags] = random_char;
 			nonnull = buf[flags];
-			// printf("rec %d, gen num %c\n", renum, buf[flags]);
 			flags++;
 			zflag = false;
 		}
 	}
 	else {
-		// printf("rec %d, overflow\n", renum);
 		return;
 	}
 }
 
 static void gen(char par) {
 	if (((nonnull == ')' || parnum >= MAX_PAR || flags >= MAX_BUF - 10) && par == '(') || (par == ')' && parnum <= 0)) {
-		// printf("rec %d want to gen (  or ) but parnum is %d or have ),return\n",renum, parnum);
 		return;
 	}
 	else {
@@ -89,11 +82,9 @@ static void gen(char par) {
 			else parnum--;
 			buf[flags] = par;
 			nonnull = buf[flags];
-			// printf("rec %d gen %c\n", renum, buf[flags]);
 			flags++;
 		}
 		else {
-			// printf("rec %d overflow, return\n", renum);
 			return;
 		}
 	}
@@ -104,12 +95,10 @@ static void gen_rand_op() {
 	if (flags > 0 && flags < MAX_BUF - 10) {
 		buf[flags] = sign[rand() % 13];
 		nonnull = buf[flags];
-		// printf("rec %d gen op %c\n", renum, buf[flags]);
 		if (buf[flags] == '/') zflag = true;
 		flags++;
 	}
 	else {
-		// printf("rec %d want to gen op but overflow or null\n", renum);
 		return;
 	}
 }
@@ -118,12 +107,9 @@ static void gen_rand_expr() {
 	renum++;
 	if (choose(6) == 1 && flags < MAX_BUF) {
 			buf[flags] = ' ';
-			// printf("gen %c\n", buf[flags]);
 		  flags++;
 	}
-//	else printf("so no gen     \n");
 	if (renum >= MAX_REC) {
-		// printf("rec has max %d\n", renum);
 		if ((nonnull < '0' || nonnull > '9') && nonnull != ')') gen_num();
 		else return;
 	}

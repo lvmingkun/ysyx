@@ -161,7 +161,6 @@ int find_op(int p, int q) {
 	int t = p;
 	int par = 0;
 	int precedence[272] = {0};
-	// printf("%d  %d\n", t, op);
 
 	precedence['+'] = 2;
 	precedence['-'] = 2;
@@ -175,10 +174,8 @@ int find_op(int p, int q) {
 
 		if (par == 0 && precedence[tokens[p].type] <= precedence[tokens[t].type]){
 			p = t;
-			// printf("%d  %d  %d\n", p, t, q);
 		}
 	}
-	// printf("\n");
 	return p;
 }
 
@@ -206,7 +203,7 @@ uint32_t eval(int p, int q, bool *success) {
 			return 0;
 		}
 		int op = find_op(p, q);
-		printf("op: %c\n", tokens[op].type);
+		// printf("op: %c\n", tokens[op].type);
 		bool success1 = false;
 		bool success2 = false;
 	  uint32_t val1 = eval(p, op - 1, &success1);
