@@ -206,7 +206,7 @@ uint32_t eval(int p, int q, bool *success) {
 			return 0;
 		}
 		int op = find_op(p, q);
-		printf("op: %c\n", tokens[op].type);
+		// printf("op: %c\n", tokens[op].type);
 		bool success1 = false;
 		bool success2 = false;
 	  uint32_t val1 = eval(p, op - 1, &success1);
