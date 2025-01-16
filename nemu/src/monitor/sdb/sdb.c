@@ -128,7 +128,7 @@ static int cmd_p(char *args) {
 		printf("Sorry, can't calculate the expression, please try to change format!\n");
 	}
 	else {
-	printf("Expression's result is %d\n", value);
+	printf("Expression's result is %u\n", value);
 	}	
 	return 0;
 }
