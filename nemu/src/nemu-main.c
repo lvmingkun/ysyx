@@ -27,13 +27,7 @@ void engine_start();
 int is_exit_status_bad();
 
 int main(int argc, char *argv[]) {
-  /* Initialize the monitor. */
-#ifdef CONFIG_TARGET_AM
-  am_init_monitor();
-#else
-  init_monitor(argc, argv);
-#endif
-  
+
   /* test expr. */
   FILE *file;
 	char line[MAX_LINE_LENGTH];
@@ -52,6 +46,7 @@ int main(int argc, char *argv[]) {
 			bool success = false;
 			word_t valid_value = expr(expre, &success);
 			if (success && valid_value == atoi(value)) {
+				printf("The %d expression %s calculate successfully\n", success_num, expre);
 				success_num++;
 			} else {
 				printf("The expression %s calculate unsuccessfully\n", expre);
@@ -64,6 +59,13 @@ int main(int argc, char *argv[]) {
 	printf("Pass %d / 10160  expressions successfully\n", success_num); 
   printf("Accuracy is  %d %% \n", success_num * 100 / 10160);
 	fclose(file);
+
+  /* Initialize the monitor. */
+#ifdef CONFIG_TARGET_AM
+  am_init_monitor();
+#else
+  init_monitor(argc, argv);
+#endif
 
   /* Start engine. */
   engine_start();
