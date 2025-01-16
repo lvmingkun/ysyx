@@ -136,12 +136,12 @@ bool check_parentheses(int p, int q, bool *qs) {
 			if (tokens[p].type == '(') s1++;
 			if (tokens[q].type == ')') s2++;
 			if (tokens[p].type == ')') {
-				if (s1 == 0) return false;
 				s1--;
+				if (s1 == 0) return false;
 			}
 			if (tokens[q].type == '(') {
-				if (s2 == 0) return false;
 				s2--;
+				if (s2 == 0) return false;
 			}
 			p++;
 			q--;
