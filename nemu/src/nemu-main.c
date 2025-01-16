@@ -39,7 +39,7 @@ int main(int argc, char *argv[]) {
 	char line[MAX_LINE_LENGTH];
 	char value[12];
 	char expre[MAX_LINE_LENGTH - 12];
-	file = fopen("../../tools/gen-expr/input", "r");
+	file = fopen("tools/gen-expr/input", "r");
 	if (file == NULL) {
 		perror("Failed to open file");
     return 1;
