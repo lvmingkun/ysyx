@@ -35,38 +35,38 @@ int main(int argc, char *argv[]) {
   init_monitor(argc, argv);
 #endif
 
-// /* test expr. */
-//   FILE *file;
-// 	char line[MAX_LINE_LENGTH] = {};
-// 	char value[12] = {};
-// 	char expre[MAX_LINE_LENGTH - 12] = {};
-// 	file = fopen("tools/gen-expr/input", "r");
-// 	if (file == NULL) {
-// 		perror("Failed to open file");
-//     return 1;
-// 	}
-// 	int success_num = 0;
-// 	int num = 0;
+/* test expr. */
+  FILE *file;
+	char line[MAX_LINE_LENGTH] = {};
+	char value[12] = {};
+	char expre[MAX_LINE_LENGTH - 12] = {};
+	file = fopen("tools/gen-expr/input", "r");
+	if (file == NULL) {
+		perror("Failed to open file");
+    return 1;
+	}
+	int success_num = 0;
+	int num = 0;
 
-// 	while (fgets(line, sizeof(line), file) != NULL) {
-// 		line[strcspn(line, "\n")] = '\0';
-// 		if (sscanf(line, "%s %[^\n]", value, expre) == 2) {
-// 			bool success = false;
-// 			uint32_t valid_value = expr(expre, &success);
-// 			if (success && valid_value == atoi(value)) {
-// 				success_num++;
-// 			} else {
-// 				printf("The expression %s calculate unsuccessfully\n", expre);
-// 			}	
-// 		} else {
-// 			printf("Line format incorrect: %s\n", line);
-// 		}
-// 		num++;
-// 	}
+	while (fgets(line, sizeof(line), file) != NULL) {
+		line[strcspn(line, "\n")] = '\0';
+		if (sscanf(line, "%s %[^\n]", value, expre) == 2) {
+			bool success = false;
+			int32_t valid_value = expr(expre, &success);
+			if (success && valid_value == atoi(value)) {
+				success_num++;
+			} else {
+				printf("The expression %s calculate unsuccessfully\n", expre);
+			}	
+		} else {
+			printf("Line format incorrect: %s\n", line);
+		}
+		num++;
+	}
 
-// 	printf("Pass %d / 10159  expressions successfully\n", success_num); 
-//   printf("Accuracy is  %d %% \n", success_num * 100 / 10159);
-// 	fclose(file);
+	printf("Pass %d / 10159  expressions successfully\n", success_num); 
+  printf("Accuracy is  %d %% \n", success_num * 100 / 10159);
+	fclose(file);
 
   /* Start engine. */
   engine_start();
