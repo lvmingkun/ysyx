@@ -19,7 +19,7 @@
  * Type 'man regex' for more information about POSIX regex functions.
  */
 #include <regex.h>
-#include <memory/paddr.h>
+#include <memory/vaddr.h>
 
 enum {
   TK_NOTYPE = 256, TK_NUM,
@@ -249,7 +249,7 @@ word_t eval(int p, int q, bool *success) {
 									return val1 - val2;
 			case '~': if (!success1) return ~val2;
 			case '!': if (!success1) return !val2; 
-			case '*': if (!success1) return paddr_read(val2, 8);
+			case '*': if (!success1) return vaddr_read(val2, 8);
 			return val1 * val2;
 			case '/': return val1 / val2;
 			case '&': return val1 & val2;

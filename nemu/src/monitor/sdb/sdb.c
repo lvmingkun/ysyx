@@ -20,7 +20,7 @@
 #include "sdb.h"
 #include <stdlib.h>
 #include <ctype.h>
-#include <memory/paddr.h>
+#include <memory/vaddr.h>
 
 static int is_batch_mode = false;
 
@@ -101,17 +101,17 @@ static int cmd_x(char *args) {
 			if (token2[0] == '0' && (token2[1] == 'X' || token2[1] == 'x')) {
 				token2+=2;
 			}
-			paddr_t addr = strtol(token2, NULL, 16);
+			vaddr_t addr = strtol(token2, NULL, 16);
 			if (n <= 0 || addr < 0x80000000 || addr > 0x87ffffff) {
 				printf("Invalid arguments: N should be positive, EXPR should be a valid address!\n");
 				return 0;
 			}
 			else {
-				printf("Starting from 0x%x to read %d addresses' information:\n", addr, n);
+				printf("Starting from 0x%lx to read %d addresses' information:\n", addr, n);
 				for (int i = 0; i < n; i++) {
 					if (i % 5 == 0)
 						printf("\n");
-					word_t data = paddr_read(addr + i * 4, 4);
+					word_t data = vaddr_read(addr + i * 4, 4);
 					printf("0x%08lx\t", data);
 				}
 			}
