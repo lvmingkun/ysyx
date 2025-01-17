@@ -102,7 +102,7 @@ static int cmd_x(char *args) {
 				token2+=2;
 			}
 			vaddr_t addr = strtol(token2, NULL, 16);
-			if (n <= 0 || addr < 0x80000000 || addr > 0x87ffffff) {
+			if (n <= 0 || addr < 0 || addr > 0x07ffffff) {
 				printf("Invalid arguments: N should be positive, EXPR should be a valid address!\n");
 				return 0;
 			}
