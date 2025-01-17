@@ -56,15 +56,14 @@ int main(int argc, char *argv[]) {
 			if (success && valid_value == value) {
 				success_num++;
 			} else {
-				printf("The expression %s calculate unsuccessfully\n", expre);
+				printf("\033[31mThe expression %s calculate unsuccessfully\033[0m\n", expre);
 			}	
 		} else {
-			printf("Line format incorrect: %s\n", line);
+			printf("\033[31mLine format incorrect: %s\033[0m\n", line);
 		}
 	}
-
-	printf("Pass %d / 10159  expressions successfully\n", success_num); 
-  printf("Accuracy is  %d %% \n", success_num * 100 / 10159);
+	printf("\033[1mPass %d / 10158  expressions successfully\033[0m\n", success_num); 
+  printf("Accuracy is  \033[1;35m%d %% \033[0m\n", success_num * 100 / 10159);
 	fclose(file);
 
   /* Start engine. */
