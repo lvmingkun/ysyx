@@ -186,7 +186,7 @@ word_t eval(int p, int q, bool *success) {
 	else if (p == q) {
 		if (tokens[p].type == TK_NUM) {
 			*success = true;
-			return (word_t) atoi(tokens[p].str);
+			return strtoul(tokens[p].str, NULL, 10);
 		}
 		if (tokens[p].type == '-') {
 			return -1;
