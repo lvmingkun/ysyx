@@ -64,8 +64,8 @@ int main(int argc, char *argv[]) {
 		num++;
 	}
 
-	printf("Pass %d / 10159  expressions successfully\n", success_num); 
-  printf("Accuracy is  %d %% \n", success_num * 100 / 10159);
+	printf("Pass %d / 10160  expressions successfully\n", success_num); 
+  printf("Accuracy is  %d %% \n", success_num * 100 / 10160);
 	fclose(file);
 
   /* Start engine. */
