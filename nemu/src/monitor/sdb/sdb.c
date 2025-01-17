@@ -93,7 +93,7 @@ static int cmd_x(char *args) {
 	else {
 		char *token2 = strtok(NULL, " ");
 		if (token2 == NULL) {
-			printf("You should choose a hexadecimal as your option!");
+			printf("You should choose a hexadecimal as your option!\n");
 			return 0;
 		}
 		else {
@@ -103,11 +103,11 @@ static int cmd_x(char *args) {
 			}
 			paddr_t addr = strtol(token2, NULL, 16);
 			if (n <= 0 || addr < 0x80000000 || addr > 0x87ffffff) {
-				printf("Invalid arguments: N should be positive, EXPR should be a valid address!");
+				printf("Invalid arguments: N should be positive, EXPR should be a valid address!\n");
 				return 0;
 			}
 			else {
-				printf("Starting from 0x%x to read %d addresses' information:", addr, n);
+				printf("Starting from 0x%x to read %d addresses' information:\n", addr, n);
 				for (int i = 0; i < n; i++) {
 					if (i % 5 == 0)
 						printf("\n");

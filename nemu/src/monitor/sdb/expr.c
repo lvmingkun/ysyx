@@ -22,7 +22,8 @@
 
 enum {
   TK_NOTYPE = 256, TK_EQ,
-	TK_NUM,
+	TK_NUM, 
+
 
   /* TODO: Add more token types */
 
@@ -45,7 +46,7 @@ static struct rule {
 	{"\\(", '('},
 	{"\\)", ')'},
   {"==", TK_EQ},        // equal
-	{"[0-9]+", TK_NUM},			// number
+	{"0[xX][0-9a-fA-F]+|[0-9]+", TK_NUM},			// number
 };
 
 #define NR_REGEX ARRLEN(rules)
@@ -186,7 +187,11 @@ word_t eval(int p, int q, bool *success) {
 	else if (p == q) {
 		if (tokens[p].type == TK_NUM) {
 			*success = true;
-			return (word_t) atoi(tokens[p].str);
+			if (tokens[p].str[0] == '0' && (tokens[p].str[1] == 'x' || tokens[p].str[1] == 'X')) {
+				return (word_t)strtol(tokens[p].str, NULL, 16);
+			} else {
+			return (word_t)atoi(tokens[p].str);
+			}
 		}
 		if (tokens[p].type == '-') {
 			return -1;
