@@ -21,9 +21,10 @@
 #include <regex.h>
 
 enum {
-  TK_NOTYPE = 256, TK_EQ,
-	TK_NUM, 
-
+  TK_NOTYPE = 256, TK_NUM,
+	TK_EQ, TK_NE,
+	TK_LE, TK_GE,
+  TK_AND, TK_OR,
 
   /* TODO: Add more token types */
 
@@ -39,13 +40,17 @@ static struct rule {
    */
 
   {" +", TK_NOTYPE},    // spaces
-  {"\\+", '+'},         // plus
-	{"-", '-'},
-	{"\\*", '*'},
-	{"/", '/'},
-	{"\\(", '('},
-	{"\\)", ')'},
-  {"==", TK_EQ},        // equal
+  {"\\+", '+'}, {"-", '-'},
+	{"\\*", '*'}, {"/", '/'},
+	{"\\(", '('}, {"\\)", ')'},
+	{"\\$", '$'}, {"~", '~'},
+  {"==", TK_EQ}, {"!=", TK_NE},
+	{"<=", TK_LE}, {">=", TK_GE},
+	{"&&", TK_AND}, {"||", TK_OR},
+	{"&", '&'}, {"|", '|'},
+	{"\\^", '^'}, {"%", '%'},
+	{">", '>'}, {"<", '<'},
+	{"!", '!'}, {"=", '='},
 	{"0[xX][0-9a-fA-F]+|[0-9]+", TK_NUM},			// number
 };
 
@@ -104,6 +109,7 @@ static bool make_token(char *e) {
         switch (rules[i].token_type) {
 					case TK_NOTYPE:
 						break;
+					case TK_EQ:
 					case TK_NUM:
 						tokens[nr_token].type = rules[i].token_type;
 						strncpy(tokens[nr_token].str, substr_start, substr_len);
@@ -162,11 +168,18 @@ int find_op(int p, int q) {
 	int t = p;
 	int par = 0;
 	int precedence[272] = {0};
-
-	precedence['+'] = 2;
-	precedence['-'] = 2;
-	precedence['*'] = 1;
-	precedence['/'] = 1;
+	precedence['='] = 10;
+  precedence[TK_OR] = 9;
+	precedence[TK_AND] = 8;
+	precedence['|'] = 7;
+	precedence['^'] = 6;
+	precedence['&'] = 5;
+	precedence[TK_EQ] = 4; precedence[TK_NE] = 4;
+	precedence[TK_GE] = 3; precedence[TK_LE] = 3;
+	precedence['<'] = 3; precedence['>'] = 3;
+	precedence['+'] = 2; precedence['-'] = 2;
+	precedence['%'] = 1; precedence['*'] = 1; precedence['/'] = 1;
+	precedence['!'] = 1; precedence['~'] = 1;
 
 	while (t < q) {
 		if (tokens[t].type == '(') par++;
@@ -223,8 +236,23 @@ word_t eval(int p, int q, bool *success) {
 									return val2;
 								}
 									return val1 - val2;
+			case '~': if (!success1) return ~val2;
+			case '!': if (!success1) return !val2; 
 			case '*': return val1 * val2;
 			case '/': return val1 / val2;
+			case '&': return val1 & val2;
+			case '|': return val1 | val2;
+			case '^': return val1 ^ val2;
+			case '%': return val1 % val2;
+			case '>': return val1 > val2;
+			case '<': return val1 < val2;
+			case '=': return val1 = val2;
+			case TK_EQ: return val1 == val2;
+			case TK_NE: return val1 != val2;
+			case TK_LE: return val1 <= val2;
+			case TK_GE: return val1 >= val2;
+			case TK_AND: return val1 && val2;
+			case TK_OR: return val1 || val2;
 			default: {
 								 *success = false;
 								 return 0;
