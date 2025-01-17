@@ -112,7 +112,7 @@ static int cmd_x(char *args) {
 					if (i % 5 == 0)
 						printf("\n");
 					word_t data = paddr_read(addr + i * 4, 4);
-					printf("0x%08x\t", data);
+					printf("0x%08lx\t", data);
 				}
 			}
 			printf("\n");
@@ -123,12 +123,12 @@ static int cmd_x(char *args) {
 
 static int cmd_p(char *args) {
 	bool success = false;
-	int32_t value = expr(args, &success);
+	word_t value = expr(args, &success);
   if (success == false) {
 		printf("Sorry, can't calculate the expression, please try to change format!\n");
 	}
 	else {
-	printf("Expression's result is %d\n", value);
+	printf("Expression's result is %ld\n", value);
 	}	
 	return 0;
 }
