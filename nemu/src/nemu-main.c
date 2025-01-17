@@ -46,7 +46,6 @@ int main(int argc, char *argv[]) {
     return 1;
 	}
 	int success_num = 0;
-	int num = 0;
 
 	while (fgets(line, sizeof(line), file) != NULL) {
 		line[strcspn(line, "\n")] = '\0';
@@ -61,7 +60,6 @@ int main(int argc, char *argv[]) {
 		} else {
 			printf("Line format incorrect: %s\n", line);
 		}
-		num++;
 	}
 
 	printf("Pass %d / 10160  expressions successfully\n", success_num); 
