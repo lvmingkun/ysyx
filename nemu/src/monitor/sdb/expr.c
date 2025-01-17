@@ -219,9 +219,9 @@ word_t eval(int p, int q, bool *success) {
 			return (word_t)atoi(tokens[p].str);
 			}
 		}
-		if (tokens[p].type == '-') {
-			return -1;
-		}
+		// if (tokens[p].type == '-') {
+		// 	return -1;
+		// }
 		return 0;
 	}
 	bool qs = true;
@@ -245,9 +245,9 @@ word_t eval(int p, int q, bool *success) {
 			case '+': if (!success1) return val2;
 									return val1 + val2;
 			case '-': if (!success1) {
-									val2 = -val2;
-								  if (val1 == -1)	return -val2;
-									return val2;
+								// 	val2 = -val2;
+								//   if (val1 == -1)	return -val2;
+									return -val2;
 								}
 									return val1 - val2;
 			case '~': if (!success1) return ~val2;
