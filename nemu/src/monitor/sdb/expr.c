@@ -19,12 +19,13 @@
  * Type 'man regex' for more information about POSIX regex functions.
  */
 #include <regex.h>
+#include <memory/paddr.h>
 
 enum {
   TK_NOTYPE = 256, TK_NUM,
 	TK_EQ, TK_NE,
 	TK_LE, TK_GE,
-  TK_AND, TK_OR,
+  TK_AND, TK_OR, TK_REG,
 
   /* TODO: Add more token types */
 
@@ -43,7 +44,7 @@ static struct rule {
   {"\\+", '+'}, {"-", '-'},
 	{"\\*", '*'}, {"/", '/'},
 	{"\\(", '('}, {"\\)", ')'},
-	{"\\$", '$'}, {"~", '~'},
+	{"~", '~'},
   {"==", TK_EQ}, {"!=", TK_NE},
 	{"<=", TK_LE}, {">=", TK_GE},
 	{"&&", TK_AND}, {"\\|\\|", TK_OR},
@@ -51,6 +52,7 @@ static struct rule {
 	{"\\^", '^'}, {"%", '%'},
 	{">", '>'}, {"<", '<'},
 	{"!", '!'}, {"=", '='},
+	{"\\${1,2}\\w+", TK_REG},
 	{"0[xX][0-9a-fA-F]+|[0-9]+", TK_NUM},			// number
 };
 
@@ -198,6 +200,9 @@ word_t eval(int p, int q, bool *success) {
 		return 0;
 	}
 	else if (p == q) {
+		if (tokens[p].type == TK_REG) {
+			return isa_reg_str2val(tokens[p].str, success);
+		}
 		if (tokens[p].type == TK_NUM) {
 			*success = true;
 			if (tokens[p].str[0] == '0' && (tokens[p].str[1] == 'x' || tokens[p].str[1] == 'X')) {
@@ -228,6 +233,7 @@ word_t eval(int p, int q, bool *success) {
 		*success = true;
 		int op_type = tokens[op].type;
 	  switch (op_type) {
+		    case '$':  
 			case '+': if (!success1) return val2;
 									return val1 + val2;
 			case '-': if (!success1) {
@@ -238,7 +244,8 @@ word_t eval(int p, int q, bool *success) {
 									return val1 - val2;
 			case '~': if (!success1) return ~val2;
 			case '!': if (!success1) return !val2; 
-			case '*': return val1 * val2;
+			case '*': if (!success1) return paddr_read(val2, 8);
+			return val1 * val2;
 			case '/': return val1 / val2;
 			case '&': return val1 & val2;
 			case '|': return val1 | val2;
