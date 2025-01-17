@@ -52,7 +52,7 @@ int main(int argc, char *argv[]) {
 		line[strcspn(line, "\n")] = '\0';
 		if (sscanf(line, "%u %[^\n]", &value, expre) == 2) {
 			bool success = false;
-			uint32_t valid_value = expr(expre, &success);
+			uint32_t valid_value = (uint32_t) expr(expre, &success);
 			if (success && valid_value == value) {
 				success_num++;
 			} else {
