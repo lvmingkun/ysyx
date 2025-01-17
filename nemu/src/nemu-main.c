@@ -53,7 +53,7 @@ int main(int argc, char *argv[]) {
 		if (sscanf(line, "%s %[^\n]", value, expre) == 2) {
 			bool success = false;
 			word_t valid_value = expr(expre, &success);
-			if (success && valid_value == (unsigned int) atoi(value)) {
+			if (success && valid_value == (word_t) atoi(value)) {
 				success_num++;
 			} else {
 				printf("The expression %s calculate unsuccessfully\n", expre);
