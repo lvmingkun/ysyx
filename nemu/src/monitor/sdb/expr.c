@@ -179,14 +179,14 @@ int find_op(int p, int q) {
 	return p;
 }
 
-uint32_t eval(int p, int q, bool *success) {
+int32_t eval(int p, int q, bool *success) {
 	if (p > q) {
 		return 0;
 	}
 	else if (p == q) {
 		if (tokens[p].type == TK_NUM) {
 			*success = true;
-			return (uint32_t)(atoi(tokens[p].str));
+			return atoi(tokens[p].str);
 		}
 		if (tokens[p].type == '-') {
 			return -1;
@@ -204,8 +204,8 @@ uint32_t eval(int p, int q, bool *success) {
 		int op = find_op(p, q);
 		bool success1 = false;
 		bool success2 = false;
-	   uint32_t val1 = eval(p, op - 1, &success1);
-	   uint32_t val2 = eval(op + 1, q, &success2);
+	   int32_t val1 = eval(p, op - 1, &success1);
+	   int32_t val2 = eval(op + 1, q, &success2);
 		if (!success2) return 0;
 		*success = true;
 		int op_type = tokens[op].type;
@@ -228,7 +228,7 @@ uint32_t eval(int p, int q, bool *success) {
 	}
 }
 
-u_int32_t expr(char *e, bool *success) {
+int32_t expr(char *e, bool *success) {
   if (!make_token(e)) {
     *success = false;
     return 0;
