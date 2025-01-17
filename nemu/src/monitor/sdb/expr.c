@@ -192,7 +192,7 @@ int find_op(int p, int q) {
 	while (t < q) {
 		if (tokens[t].type == '(') par++;
 		if (tokens[t].type == ')') par--;
-		if (t == 0 || tokens[t - 1].type < TK_REG || tokens[t - 1].type != '(') {
+		if (t == 0 || tokens[t - 1].type < TK_REG || tokens[t - 1].type == '(') {
 			t++;
 			continue;
 		}
