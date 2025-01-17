@@ -123,12 +123,12 @@ static int cmd_x(char *args) {
 
 static int cmd_p(char *args) {
 	bool success = false;
-	int32_t value = expr(args, &success);
+	uint32_t value = expr(args, &success);
   if (success == false) {
 		printf("Sorry, can't calculate the expression, please try to change format!\n");
 	}
 	else {
-	printf("Expression's result is %d\n", value);
+	printf("Expression's result is %u\n", value);
 	}	
 	return 0;
 }
