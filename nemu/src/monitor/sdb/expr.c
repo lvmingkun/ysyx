@@ -30,7 +30,7 @@ enum {
 
 static struct rule {
   const char *regex;
-  uint32_t token_type;
+  int token_type;
 } rules[] = {
 
   /* TODO: Add more rules.
@@ -69,7 +69,7 @@ void init_regex() {
 }
 
 typedef struct token {
-  u_int32_t type;
+  int type;
   char str[32];
 } Token;
 
@@ -179,14 +179,14 @@ int find_op(int p, int q) {
 	return p;
 }
 
-word_t eval(int p, int q, bool *success) {
+uint32_t eval(int p, int q, bool *success) {
 	if (p > q) {
 		return 0;
 	}
 	else if (p == q) {
 		if (tokens[p].type == TK_NUM) {
 			*success = true;
-			return strtoul(tokens[p].str, NULL, 10);
+			return (uint32_t)(atoi(tokens[p].str));
 		}
 		if (tokens[p].type == '-') {
 			return -1;
@@ -204,8 +204,8 @@ word_t eval(int p, int q, bool *success) {
 		int op = find_op(p, q);
 		bool success1 = false;
 		bool success2 = false;
-	   word_t val1 = eval(p, op - 1, &success1);
-	   word_t val2 = eval(op + 1, q, &success2);
+	   uint32_t val1 = eval(p, op - 1, &success1);
+	   uint32_t val2 = eval(op + 1, q, &success2);
 		if (!success2) return 0;
 		*success = true;
 		int op_type = tokens[op].type;
@@ -228,7 +228,7 @@ word_t eval(int p, int q, bool *success) {
 	}
 }
 
-word_t expr(char *e, bool *success) {
+u_int32_t expr(char *e, bool *success) {
   if (!make_token(e)) {
     *success = false;
     return 0;
