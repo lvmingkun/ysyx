@@ -111,7 +111,7 @@ static int cmd_x(char *args) {
 				for (int i = 0; i < n; i++) {
 					if (i % 5 == 0)
 						printf("\n");
-					word_t data = vaddr_read(addr + i * 4, 4);
+					word_t data = vaddr_read(addr + i * 4 + CONFIG_MBASE, 4);
 					printf("0x%08lx\t", data);
 				}
 			}
