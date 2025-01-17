@@ -27,7 +27,7 @@ void isa_reg_display() {
 	printf("\033[1;30;47mEvery register's value as follow:\033[0m\n");
 	for (int i = 0; i < 8; i++) {
 		for (int j = 0; j < 4; j++) {
-			printf("\033[32m%-3s\033[0m :  \033[36m%-11ld[0m\t", reg_name(i * 4 + j), gpr(i * 4 + j));
+			printf("\033[32m%-3s\033[0m :  \033[36m%-11ld\033[0m\t", reg_name(i * 4 + j), gpr(i * 4 + j));
 		}
 		printf("\n");
 	}
