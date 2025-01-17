@@ -193,7 +193,7 @@ int find_op(int p, int q) {
 		if (tokens[t].type == ')') par--;
 		t++;
 
-		if (par == 0 && precedence[tokens[p].type] <= precedence[tokens[t].type]){
+		if (par == 0 && precedence[tokens[p].type] <= precedence[tokens[t].type] && precedence[tokens[t - 1].type] < 1) {
 			p = t;
 		}
 	}
