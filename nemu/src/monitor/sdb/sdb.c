@@ -88,6 +88,7 @@ static int cmd_info(char *args) {
 static int cmd_x(char *args) {
 	char *token1 = strtok(args, " ");
 	if (token1 == NULL) {
+    printf("\33[31mPlease choose an integer(>0) as your choice!\033[0m\n");
 		return 0;
 	}
 	else {
@@ -128,7 +129,7 @@ static int cmd_p(char *args) {
 		printf("\033[31mSorry, can't calculate the expression, please try to change format!\033[0m\n");
 	}
 	else {
-	printf("\033[35mExpression's result is \033[0m\033[36m%ld\033[0m\n", value);
+	printf("\n\033[35mExpression's result is \033[0m\033[1;36m%ld\033[0m\n", value);
 	}	
 	return 0;
 }
