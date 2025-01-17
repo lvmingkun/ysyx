@@ -186,7 +186,7 @@ word_t eval(int p, int q, bool *success) {
 	else if (p == q) {
 		if (tokens[p].type == TK_NUM) {
 			*success = true;
-			return atoi(tokens[p].str);
+			return (word_t) atoi(tokens[p].str);
 		}
 		if (tokens[p].type == '-') {
 			return -1;
@@ -205,8 +205,8 @@ word_t eval(int p, int q, bool *success) {
 		int op = find_op(p, q);
 		bool success1 = false;
 		bool success2 = false;
-	   uint32_t val1 = eval(p, op - 1, &success1);
-	   uint32_t val2 = eval(op + 1, q, &success2);
+	   word_t val1 = eval(p, op - 1, &success1);
+	   word_t val2 = eval(op + 1, q, &success2);
 		if (!success2) return 0;
 		*success = true;
 		int op_type = tokens[op].type;
