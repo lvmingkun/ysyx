@@ -47,13 +47,14 @@ int main(int argc, char *argv[]) {
 	}
 	int success_num = 0;
 	int num = 0;
+	char *endptr;
 
 	while (fgets(line, sizeof(line), file) != NULL) {
 		line[strcspn(line, "\n")] = '\0';
 		if (sscanf(line, "%s %[^\n]", value, expre) == 2) {
 			bool success = false;
 			word_t valid_value = expr(expre, &success);
-			if (success && valid_value == (word_t) atoi(value)) {
+			if (success && valid_value == (strtoul(value, &endptr, 10))) {
 				success_num++;
 			} else {
 				printf("The expression %s calculate unsuccessfully\n", expre);
