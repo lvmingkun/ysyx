@@ -123,7 +123,7 @@ static int cmd_x(char *args) {
 
 static int cmd_p(char *args) {
 	bool success = false;
-	int32_t value = expr(args, &success);
+	word_t value = expr(args, &success);
   if (success == false) {
 		printf("Sorry, can't calculate the expression, please try to change format!\n");
 	}

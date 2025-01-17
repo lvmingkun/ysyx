@@ -38,7 +38,8 @@ int main(int argc, char *argv[]) {
 /* test expr. */
   FILE *file;
 	char line[MAX_LINE_LENGTH] = {};
-	char value[12] = {};
+	// char value[12] = {};
+	uint32_t value = 0;
 	char expre[MAX_LINE_LENGTH - 12] = {};
 	file = fopen("tools/gen-expr/input", "r");
 	if (file == NULL) {
@@ -49,10 +50,10 @@ int main(int argc, char *argv[]) {
 
 	while (fgets(line, sizeof(line), file) != NULL) {
 		line[strcspn(line, "\n")] = '\0';
-		if (sscanf(line, "%s %[^\n]", value, expre) == 2) {
+		if (sscanf(line, "%u %[^\n]", &value, expre) == 2) {
 			bool success = false;
-			int32_t valid_value = expr(expre, &success);
-			if (success && valid_value == atoi(value)) {
+			uint32_t valid_value = expr(expre, &success);
+			if (success && valid_value == value) {
 				success_num++;
 			} else {
 				printf("The expression %s calculate unsuccessfully\n", expre);
