@@ -22,10 +22,11 @@
 #include <memory/vaddr.h>
 
 enum {
-  TK_NOTYPE = 256, TK_NUM,
+  TK_NOTYPE = 256,
 	TK_EQ, TK_NE,
 	TK_LE, TK_GE,
-  TK_AND, TK_OR, TK_REG,
+  TK_AND, TK_OR,
+  TK_REG, TK_NUM,
 
   /* TODO: Add more token types */
 
@@ -175,27 +176,29 @@ int find_op(int p, int q) {
 	int t = p;
 	int par = 0;
 	int precedence[272] = {0};
-	precedence['='] = 10;
-  precedence[TK_OR] = 9;
-	precedence[TK_AND] = 8;
-	precedence['|'] = 7;
-	precedence['^'] = 6;
-	precedence['&'] = 5;
-	precedence[TK_EQ] = 4; precedence[TK_NE] = 4;
-	precedence[TK_GE] = 3; precedence[TK_LE] = 3;
-	precedence['<'] = 3; precedence['>'] = 3;
-	precedence['+'] = 2; precedence['-'] = 2;
-	precedence['%'] = 1; precedence['*'] = 1; precedence['/'] = 1;
+	precedence['='] = 11;
+  precedence[TK_OR] = 10;
+	precedence[TK_AND] = 9;
+	precedence['|'] = 8;
+	precedence['^'] = 7;
+	precedence['&'] = 6;
+	precedence[TK_EQ] = 5; precedence[TK_NE] = 5;
+	precedence[TK_GE] = 4; precedence[TK_LE] = 4;
+	precedence['<'] = 4; precedence['>'] = 4;
+	precedence['+'] = 3; precedence['-'] = 3;
+	precedence['%'] = 2; precedence['*'] = 2; precedence['/'] = 2;
 	precedence['!'] = 1; precedence['~'] = 1;
-
+    
 	while (t < q) {
 		if (tokens[t].type == '(') par++;
 		if (tokens[t].type == ')') par--;
-		t++;
-
-		if (par == 0 && precedence[tokens[p].type] <= precedence[tokens[t].type]){
+		if (t == 0 || tokens[t - 1].type < TK_REG || tokens[t - 1].type != '(') {
+			precedence['+'] = precedence['-'] = precedence['*'] = 1;
+		}
+		if (p != t && par == 0 && precedence[tokens[p].type] <= precedence[tokens[t].type]){
 			p = t;
 		}
+		t++;
 	}
 	return p;
 }
