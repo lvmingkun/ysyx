@@ -52,8 +52,8 @@ int main(int argc, char *argv[]) {
 		line[strcspn(line, "\n")] = '\0';
 		if (sscanf(line, "%s %[^\n]", value, expre) == 2) {
 			bool success = false;
-			int32_t valid_value = expr(expre, &success);
-			if (success && valid_value == atoi(value)) {
+			word_t valid_value = expr(expre, &success);
+			if (success && valid_value == (unsigned int) atoi(value)) {
 				success_num++;
 			} else {
 				printf("The expression %s calculate unsuccessfully\n", expre);
