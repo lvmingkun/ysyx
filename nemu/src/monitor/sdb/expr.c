@@ -22,11 +22,10 @@
 #include <memory/vaddr.h>
 
 enum {
-  TK_NOTYPE = 256,
+  TK_NOTYPE = 256, TK_NUM,
 	TK_EQ, TK_NE,
 	TK_LE, TK_GE,
-  TK_AND, TK_OR,
-  TK_REG, TK_NUM,
+  TK_AND, TK_OR, TK_REG,
 
   /* TODO: Add more token types */
 
@@ -188,18 +187,15 @@ int find_op(int p, int q) {
 	precedence['+'] = 3; precedence['-'] = 3;
 	precedence['%'] = 2; precedence['*'] = 2; precedence['/'] = 2;
 	precedence['!'] = 1; precedence['~'] = 1;
-    
+
 	while (t < q) {
 		if (tokens[t].type == '(') par++;
 		if (tokens[t].type == ')') par--;
-		if (t == 0 || tokens[t - 1].type < TK_REG || tokens[t - 1].type == '(') {
-			t++;
-			continue;
-		}
-		if (p != t && par == 0 && precedence[tokens[p].type] <= precedence[tokens[t].type]){
+		t++;
+
+		if (par == 0 && precedence[tokens[p].type] <= precedence[tokens[t].type]){
 			p = t;
 		}
-		t++;
 	}
 	return p;
 }
@@ -220,9 +216,9 @@ word_t eval(int p, int q, bool *success) {
 			return (word_t)atoi(tokens[p].str);
 			}
 		}
-		// if (tokens[p].type == '-') {
-		// 	return -1;
-		// }
+		if (tokens[p].type == '-') {
+			return -1;
+		}
 		return 0;
 	}
 	bool qs = true;
@@ -246,9 +242,9 @@ word_t eval(int p, int q, bool *success) {
 			case '+': if (!success1) return val2;
 									return val1 + val2;
 			case '-': if (!success1) {
-								// 	val2 = -val2;
-								//   if (val1 == -1)	return -val2;
-									return -val2;
+									val2 = -val2;
+								  if (val1 == -1)	return -val2;
+									return val2;
 								}
 									return val1 - val2;
 			case '~': if (!success1) return ~val2;
