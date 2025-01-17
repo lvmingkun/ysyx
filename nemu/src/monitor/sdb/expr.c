@@ -30,7 +30,7 @@ enum {
 
 static struct rule {
   const char *regex;
-  int token_type;
+  uint32_t token_type;
 } rules[] = {
 
   /* TODO: Add more rules.
@@ -69,7 +69,7 @@ void init_regex() {
 }
 
 typedef struct token {
-  int type;
+  u_int32_t type;
   char str[32];
 } Token;
 
@@ -195,7 +195,6 @@ word_t eval(int p, int q, bool *success) {
 	}
 	bool qs = true;
 	if (check_parentheses(p, q, &qs) == true) {
-		Log("Matching () successfully!"); 
 		return eval(p + 1, q - 1, success);
 	}
 	else {
