@@ -249,7 +249,13 @@ word_t eval(int p, int q, bool *success) {
 									return val1 - val2;
 			case '~': if (!success1) return ~val2;
 			case '!': if (!success1) return !val2; 
-			case '*': if (!success1) return vaddr_read(val2, 8);
+			case '*': if (!success1) {
+				if (val2 < 0x80000000 || val2 > 0x87ffffff) {
+				return 0;
+			} else {
+				return vaddr_read(val2, 8);
+				}
+			}
 			return val1 * val2;
 			case '/': return val1 / val2;
 			case '&': return val1 & val2;
