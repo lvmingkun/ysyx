@@ -63,7 +63,7 @@ static int cmd_si(char *args) {
 	else {
 		int n = atoi(args);
 		if (n <= 0) {
-			printf("Please choose an integer(>0) as your choice!");
+			printf("\33[31mPlease choose an integer(>0) as your choice!\033[0m\n");
 			}
 		else {
 			cpu_exec(n);
@@ -80,7 +80,7 @@ static int cmd_info(char *args) {
 		printf("no define");
 	}
 	else {
-		printf("You should choose 'r' or 'w' as your option!");
+		printf("\33[31mYou should choose 'r' or 'w' as your option!\033[0m\n");
 	}
 	return 0;
 }
@@ -93,7 +93,7 @@ static int cmd_x(char *args) {
 	else {
 		char *token2 = strtok(NULL, " ");
 		if (token2 == NULL) {
-			printf("You should choose a hexadecimal as your option!\n");
+			printf("\33[31mYou should choose a hexadecimal as your option!\033[0m\n");
 			return 0;
 		}
 		else {
@@ -103,16 +103,16 @@ static int cmd_x(char *args) {
 			}
 			vaddr_t addr = strtol(token2, NULL, 16);
 			if (n <= 0 || addr < 0 || addr > 0x07ffffff) {
-				printf("Invalid arguments: N should be positive, EXPR should be a valid address!\n");
+				printf("\33[31mInvalid arguments: N should be positive, EXPR should be a valid address!\033[0m\n");
 				return 0;
 			}
 			else {
-				printf("Starting from 0x%lx to read %d addresses' information:\n", addr, n);
+				printf("\33[1mStarting from 0x%lx to read %d addresses' information:\033[0m\n", addr, n);
 				for (int i = 0; i < n; i++) {
 					if (i % 5 == 0)
 						printf("\n");
 					word_t data = vaddr_read(addr + i * 4 + CONFIG_MBASE, 4);
-					printf("0x%08lx\t", data);
+					printf("\33[33m0x%08lx\033[0m\t", data);
 				}
 			}
 			printf("\n");
@@ -125,10 +125,10 @@ static int cmd_p(char *args) {
 	bool success = false;
 	word_t value = expr(args, &success);
   if (success == false) {
-		printf("Sorry, can't calculate the expression, please try to change format!\n");
+		printf("\033[31mSorry, can't calculate the expression, please try to change format!\033[0m\n");
 	}
 	else {
-	printf("Expression's result is %ld\n", value);
+	printf("\033[35mExpression's result is \033[0m\033[36m%ld\033[0m\n", value);
 	}	
 	return 0;
 }
