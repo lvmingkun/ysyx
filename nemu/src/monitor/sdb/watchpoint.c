@@ -70,7 +70,7 @@ void free_wp(WP *wp) {
         free(wp->expr);
         wp->expr = NULL;
     }
-	free_->value = 0;
+	wp->value = 0;
 	wp_num++;
 }
 
