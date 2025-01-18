@@ -52,7 +52,10 @@ WP* new_wp(char *exp, word_t valu) {
 }
 
 void free_wp(WP *wp) {
-	if (wp == NULL) return;	
+	if (wp == NULL) {
+		printf("\033[31mNo watchpoints are using!\033[0m\n");
+		assert(0);
+	}	
 	if (wp == head) {
 		head = head->next;
 	} else {
@@ -109,6 +112,7 @@ void delete_watchpoints(int num) {
 			}
 			p = p->next;
 		}
+		printf("\033[31mWatchpoint not exist.\033[0m\n");
 	}
 }
 
