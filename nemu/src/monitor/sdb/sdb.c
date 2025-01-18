@@ -77,7 +77,7 @@ static int cmd_info(char *args) {
 		isa_reg_display();
 	}
 	else if (args[0] == 'w') {
-		printf("no define");
+		print_watchpoints();
 	}
 	else {
 		printf("\33[31mYou should choose 'r' or 'w' as your option!\033[0m\n");
@@ -134,14 +134,34 @@ static int cmd_p(char *args) {
 	return 0;
 }
 
-static int cmd_w() {
-	printf("fff\n");
-
+static int cmd_w(char *args) {
+  if (args == NULL) printf("\33[31mPlease choose an expression as your choice!\033[0m\n");
+  else {
+    bool success = false;
+	  word_t value = expr(args, &success);
+    if (success == false) {
+      printf("\033[31mSorry, can't calculate the expression, please try to change format!\033[0m\n");
+      }
+	  else {
+      new_wp(args, value);
+    }
+  }
 	return 0;
 }
-static int cmd_d() {
-	printf("fff\n");
 
+static int cmd_d(char *args) {
+	if (args == NULL) {
+		printf("\33[31mPlease choose an integer as your choice!\033[0m\n");cpu_exec(1);
+	}
+	else {
+		int n = atoi(args);
+		if (n <= 0) {
+			printf("\33[31mPlease choose an integer(>0) as your choice!\033[0m\n");
+			}
+		else {
+			delete_watchpoints(n);
+		}
+	}
 	return 0;
 }
 
