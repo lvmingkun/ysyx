@@ -20,7 +20,7 @@
 #include "sdb.h"
 #include <stdlib.h>
 #include <ctype.h>
-#include <memory/paddr.h>
+#include <memory/vaddr.h>
 
 static int is_batch_mode = false;
 
@@ -63,7 +63,7 @@ static int cmd_si(char *args) {
 	else {
 		int n = atoi(args);
 		if (n <= 0) {
-			printf("Please choose an integer(>0) as your choice!");
+			printf("\033[31mPlease choose an integer(>0) as your choice!\033[0m\n");
 			}
 		else {
 			cpu_exec(n);
@@ -77,10 +77,10 @@ static int cmd_info(char *args) {
 		isa_reg_display();
 	}
 	else if (args[0] == 'w') {
-		printf("no define");
+		print_watchpoints();
 	}
 	else {
-		printf("You should choose 'r' or 'w' as your option!");
+		printf("\033[31mYou should choose 'r' or 'w' as your option!\033[0m\n");
 	}
 	return 0;
 }
@@ -88,12 +88,13 @@ static int cmd_info(char *args) {
 static int cmd_x(char *args) {
 	char *token1 = strtok(args, " ");
 	if (token1 == NULL) {
+    printf("\033[31mPlease choose an integer(>0) as your choice!\033[0m\n");
 		return 0;
 	}
 	else {
 		char *token2 = strtok(NULL, " ");
 		if (token2 == NULL) {
-			printf("You should choose a hexadecimal as your option!");
+			printf("\033[31mYou should choose a hexadecimal as your option!\033[0m\n");
 			return 0;
 		}
 		else {
@@ -101,18 +102,18 @@ static int cmd_x(char *args) {
 			if (token2[0] == '0' && (token2[1] == 'X' || token2[1] == 'x')) {
 				token2+=2;
 			}
-			paddr_t addr = strtol(token2, NULL, 16);
-			if (n <= 0 || addr < 0x80000000 || addr > 0x87ffffff) {
-				printf("Invalid arguments: N should be positive, EXPR should be a valid address!");
+			vaddr_t addr = strtol(token2, NULL, 16);
+			if (n <= 0 || addr < 0 || addr > 0x07ffffff) {
+				printf("\033[31mInvalid arguments: N should be positive, EXPR should be a valid address!\033[0m\n");
 				return 0;
 			}
 			else {
-				printf("Starting from 0x%x to read %d addresses' information:", addr, n);
+				printf("\033[1mStarting from 0x%lx to read %d addresses' information:\033[0m\n", addr, n);
 				for (int i = 0; i < n; i++) {
 					if (i % 5 == 0)
 						printf("\n");
-					word_t data = paddr_read(addr + i * 4, 4);
-					printf("0x%08x\t", data);
+					word_t data = vaddr_read(addr + i * 4 + CONFIG_MBASE, 4);
+					printf("\033[33m0x%08lx\033[0m\t", data);
 				}
 			}
 			printf("\n");
@@ -125,22 +126,37 @@ static int cmd_p(char *args) {
 	bool success = false;
 	word_t value = expr(args, &success);
   if (success == false) {
-		printf("Sorry, can't calculate the expression, please try to change format!\n");
+		printf("\033[31mSorry, can't calculate the expression, please try to change format!\033[0m\n");
 	}
 	else {
-	printf("Expression's result is %d\n", value);
+	printf("\n\033[35mExpression's result is \033[0m\033[1;36m%ld\033[0m\n", value);
 	}	
 	return 0;
 }
 
-static int cmd_w() {
-	printf("fff\n");
-
+static int cmd_w(char *args) {
+  if (args == NULL) printf("\033[31mPlease choose an expression as your choice!\033[0m\n");
+  else {
+    bool success = false;
+	  word_t value = expr(args, &success);
+    if (success == false) {
+      printf("\033[31mSorry, can't calculate the expression, please try to change format!\033[0m\n");
+      }
+	  else {
+      new_wp(args, value);
+    }
+  }
 	return 0;
 }
-static int cmd_d() {
-	printf("fff\n");
 
+static int cmd_d(char *args) {
+	if (args == NULL) {
+		printf("\033[31mPlease choose an integer as your choice!\033[0m\n");cpu_exec(1);
+	}
+	else {
+		int n = atoi(args);
+		delete_watchpoints(n);
+	}
 	return 0;
 }
 

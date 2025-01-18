@@ -61,3 +61,11 @@ else
 # Include rules to build NEMU
 include $(NEMU_HOME)/scripts/native.mk
 endif
+
+count:
+	@echo "The total number of lines in all the .c and .h files in nemu is:"
+	@find . -type f \( -name "*.c" -o -name "*.h" \) -exec cat {} + | wc -l
+
+count_nospace:
+	@echo "The total number of lines in all the .c and .h files in nemu without spaces is:"
+	@find . -type f \( -name "*.c" -o -name "*.h" \) -exec awk 'NF > 0' {} + | wc -l

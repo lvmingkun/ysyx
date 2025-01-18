@@ -19,10 +19,13 @@
  * Type 'man regex' for more information about POSIX regex functions.
  */
 #include <regex.h>
+#include <memory/vaddr.h>
 
 enum {
-  TK_NOTYPE = 256, TK_EQ,
-	TK_NUM,
+  TK_NOTYPE = 256, TK_NUM,
+	TK_EQ, TK_NE,
+	TK_LE, TK_GE,
+  TK_AND, TK_OR, TK_REG,
 
   /* TODO: Add more token types */
 
@@ -38,14 +41,19 @@ static struct rule {
    */
 
   {" +", TK_NOTYPE},    // spaces
-  {"\\+", '+'},         // plus
-	{"-", '-'},
-	{"\\*", '*'},
-	{"/", '/'},
-	{"\\(", '('},
-	{"\\)", ')'},
-  {"==", TK_EQ},        // equal
-	{"[0-9]+", TK_NUM},			// number
+  {"\\+", '+'}, {"-", '-'},
+	{"\\*", '*'}, {"/", '/'},
+	{"\\(", '('}, {"\\)", ')'},
+	{"~", '~'},
+  {"==", TK_EQ}, {"!=", TK_NE},
+	{"<=", TK_LE}, {">=", TK_GE},
+	{"&&", TK_AND}, {"\\|\\|", TK_OR},
+	{"&", '&'}, {"\\|", '|'},
+	{"\\^", '^'}, {"%", '%'},
+	{">", '>'}, {"<", '<'},
+	{"!", '!'}, {"=", '='},
+	{"\\${1,2}\\w+", TK_REG},
+	{"0[xX][0-9a-fA-F]+|[0-9]+", TK_NUM},			// number
 };
 
 #define NR_REGEX ARRLEN(rules)
@@ -73,7 +81,7 @@ typedef struct token {
   char str[32];
 } Token;
 
-static Token tokens[32] __attribute__((used)) = {};
+static Token tokens[256] __attribute__((used)) = {};
 static int nr_token __attribute__((used))  = 0;
 
 static bool make_token(char *e) {
@@ -102,6 +110,12 @@ static bool make_token(char *e) {
 
         switch (rules[i].token_type) {
 					case TK_NOTYPE:
+						break;
+					case TK_REG:
+					    tokens[nr_token].type = rules[i].token_type;
+						strncpy(tokens[nr_token].str, substr_start + 1, substr_len - 1);
+					 	tokens[nr_token].str[substr_len - 1] = '\0';
+						nr_token++;
 						break;
 					case TK_NUM:
 						tokens[nr_token].type = rules[i].token_type;
@@ -132,18 +146,16 @@ bool check_parentheses(int p, int q, bool *qs) {
 	else {
 		int s1 = 0;
 		int s2 = 0;
-		p+=1;
-		q-=1;
 		while (p < q) {
 			if (tokens[p].type == '(') s1++;
 			if (tokens[q].type == ')') s2++;
 			if (tokens[p].type == ')') {
-				if (s1 == 0) return false;
 				s1--;
+				if (s1 == 0) return false;
 			}
 			if (tokens[q].type == '(') {
-				if (s2 == 0) return false;
 				s2--;
+				if (s2 == 0) return false;
 			}
 			p++;
 			q--;
@@ -151,6 +163,7 @@ bool check_parentheses(int p, int q, bool *qs) {
 				if (tokens[p].type == '(') s1++;
 				if (tokens[p].type == ')') s2++;
 			}
+			if (p > q) break;
 		}
 		if (s1 == s2) return true;
 		*qs = false;
@@ -160,23 +173,29 @@ bool check_parentheses(int p, int q, bool *qs) {
 
 int find_op(int p, int q) {
 	int t = p;
-	bool par = false;
-	int precedence[128];
-	for (int i = 0; i < 128; i++) {
-		precedence[i] = 0;
-	}
-	precedence['+'] = 2;
-	precedence['-'] = 2;
-	precedence['*'] = 1;
-	precedence['/'] = 1;
+	int par = 0;
+	int precedence[272] = {0};
+	precedence['='] = 11;
+  precedence[TK_OR] = 10;
+	precedence[TK_AND] = 9;
+	precedence['|'] = 8;
+	precedence['^'] = 7;
+	precedence['&'] = 6;
+	precedence[TK_EQ] = 5; precedence[TK_NE] = 5;
+	precedence[TK_GE] = 4; precedence[TK_LE] = 4;
+	precedence['<'] = 4; precedence['>'] = 4;
+	precedence['+'] = 3; precedence['-'] = 3;
+	precedence['%'] = 2; precedence['*'] = 2; precedence['/'] = 2;
+	precedence['!'] = 1; precedence['~'] = 1;
 
 	while (t < q) {
-		if (tokens[t].type == '(') par = true;
-		if (tokens[t].type == ')') par = false;
-		if (!par && precedence[tokens[p].type] <= precedence[tokens[t].type]) {	
+		if (tokens[t].type == '(') par++;
+		if (tokens[t].type == ')') par--;
+		t++;
+
+		if (par == 0 && precedence[tokens[p].type] <= precedence[tokens[t].type] && precedence[tokens[t - 1].type] < 1) {
 			p = t;
 		}
-		t++;
 	}
 	return p;
 }
@@ -186,9 +205,16 @@ word_t eval(int p, int q, bool *success) {
 		return 0;
 	}
 	else if (p == q) {
+		if (tokens[p].type == TK_REG) {
+			return isa_reg_str2val(tokens[p].str, success);
+		}
 		if (tokens[p].type == TK_NUM) {
 			*success = true;
-			return atoi(tokens[p].str);
+			if (tokens[p].str[0] == '0' && (tokens[p].str[1] == 'x' || tokens[p].str[1] == 'X')) {
+				return (word_t)strtol(tokens[p].str, NULL, 16);
+			} else {
+			return (word_t)atoi(tokens[p].str);
+			}
 		}
 		if (tokens[p].type == '-') {
 			return -1;
@@ -197,7 +223,6 @@ word_t eval(int p, int q, bool *success) {
 	}
 	bool qs = true;
 	if (check_parentheses(p, q, &qs) == true) {
-		Log("Matching () successfully!"); 
 		return eval(p + 1, q - 1, success);
 	}
 	else {
@@ -207,8 +232,8 @@ word_t eval(int p, int q, bool *success) {
 		int op = find_op(p, q);
 		bool success1 = false;
 		bool success2 = false;
-	  word_t val1 = eval(p, op - 1, &success1);
-	  word_t val2 = eval(op + 1, q, &success2);
+	   word_t val1 = eval(p, op - 1, &success1);
+	   word_t val2 = eval(op + 1, q, &success2);
 		if (!success2) return 0;
 		*success = true;
 		int op_type = tokens[op].type;
@@ -221,8 +246,30 @@ word_t eval(int p, int q, bool *success) {
 									return val2;
 								}
 									return val1 - val2;
-			case '*': return val1 * val2;
+			case '~': if (!success1) return ~val2;
+			case '!': if (!success1) return !val2; 
+			case '*': if (!success1) {
+				if (val2 < CONFIG_MBASE || val2 > 0x87ffffff) {
+				return 0;
+			} else {
+				return vaddr_read(val2, 8);
+				}
+			}
+			return val1 * val2;
 			case '/': return val1 / val2;
+			case '&': return val1 & val2;
+			case '|': return val1 | val2;
+			case '^': return val1 ^ val2;
+			case '%': return val1 % val2;
+			case '>': return val1 > val2;
+			case '<': return val1 < val2;
+			case '=': return val1 = val2;
+			case TK_EQ: return val1 == val2;
+			case TK_NE: return val1 != val2;
+			case TK_LE: return val1 <= val2;
+			case TK_GE: return val1 >= val2;
+			case TK_AND: return val1 && val2;
+			case TK_OR: return val1 || val2;
 			default: {
 								 *success = false;
 								 return 0;
