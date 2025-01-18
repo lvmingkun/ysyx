@@ -25,7 +25,7 @@ void init_wp_pool() {
   int i;
   for (i = 0; i < NR_WP; i ++) {
     wp_pool[i].NO = i;
-		wp_pool[i].expr = " ";
+		wp_pool[i].expr = NULL;
 		wp_pool[i].value = 0;
     wp_pool[i].next = (i == NR_WP - 1 ? NULL : &wp_pool[i + 1]);
   }
@@ -45,7 +45,7 @@ WP* new_wp(char *exp, word_t valu) {
 	free_ = free_->next;
 	head->next = p;
 	wp_num--;
-	head->expr = exp;
+	head->expr = strdup(exp);
 	head->value = valu;
 	printf("Add a new watchpoint %d\n", head->NO);
 	return head;
@@ -66,7 +66,10 @@ void free_wp(WP *wp) {
 	}
 	wp->next = free_;
 	free_ = wp;
-	free_->expr = " ";
+	if (wp->expr != NULL) {
+        free(wp->expr);
+        wp->expr = NULL;
+    }
 	free_->value = 0;
 	wp_num++;
 }

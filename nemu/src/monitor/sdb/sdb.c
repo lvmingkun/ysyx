@@ -155,12 +155,7 @@ static int cmd_d(char *args) {
 	}
 	else {
 		int n = atoi(args);
-		if (n <= 0) {
-			printf("\33[31mPlease choose an integer(>0) as your choice!\033[0m\n");
-			}
-		else {
-			delete_watchpoints(n);
-		}
+		delete_watchpoints(n);
 	}
 	return 0;
 }
