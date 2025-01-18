@@ -206,6 +206,7 @@ word_t eval(int p, int q, bool *success) {
 	}
 	else if (p == q) {
 		if (tokens[p].type == TK_REG) {
+			printf("ddddd\n");
 			return isa_reg_str2val(tokens[p].str, success);
 		}
 		if (tokens[p].type == TK_NUM) {
