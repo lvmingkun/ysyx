@@ -37,7 +37,7 @@ void init_wp_pool() {
 /* TODO: Implement the functionality of watchpoint */
 WP* new_wp(char *exp, word_t valu) {
 	if (wp_num == 0) {
-		printf("No available watchpoints!\n");
+		printf("\033[31mNo available watchpoints!\033[0m\n");
 		return NULL;
 	}
 	WP *p = head;
@@ -80,7 +80,7 @@ void scan_watchpoints() {
 		if (p->value != new_value) {
 			nemu_state.state = NEMU_STOP;
 			p->value = new_value;
-			printf("Watchpoint %d has been changed, program stops\n", p->NO);
+			printf("\033[32mWatchpoint %d has been changed , it becomes %s, program stops\33[0m\n", p->NO, p->expr);
 		}
 	p = p->next;
 	}
@@ -91,7 +91,7 @@ void print_watchpoints() {
 	if (p == NULL) printf("No any watchpoints\n");
 	else {
 		while (p) {
-			printf("Watchpoint %d : %s is %ld\n", p->NO, p->expr, p->value);
+			printf("\033[35mWatchpoint \033[33m%d\033[35m : \033[33m%s \033[35mis \033[33m%ld\033[0m\n", p->NO, p->expr, p->value);
 			p = p->next;
 		}
 	}
@@ -99,7 +99,7 @@ void print_watchpoints() {
 
 void delete_watchpoints(int num) {
 	WP *p = head;
-	if (p == NULL) printf("There is no watchpoints\n");
+	if (p == NULL) printf("\033[31mThere is no watchpoints\033[0m\n");
 	else {
 		while (p) {
 			if (p->NO == num) {

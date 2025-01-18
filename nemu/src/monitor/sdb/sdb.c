@@ -63,7 +63,7 @@ static int cmd_si(char *args) {
 	else {
 		int n = atoi(args);
 		if (n <= 0) {
-			printf("\33[31mPlease choose an integer(>0) as your choice!\033[0m\n");
+			printf("\033[31mPlease choose an integer(>0) as your choice!\033[0m\n");
 			}
 		else {
 			cpu_exec(n);
@@ -80,7 +80,7 @@ static int cmd_info(char *args) {
 		print_watchpoints();
 	}
 	else {
-		printf("\33[31mYou should choose 'r' or 'w' as your option!\033[0m\n");
+		printf("\033[31mYou should choose 'r' or 'w' as your option!\033[0m\n");
 	}
 	return 0;
 }
@@ -88,13 +88,13 @@ static int cmd_info(char *args) {
 static int cmd_x(char *args) {
 	char *token1 = strtok(args, " ");
 	if (token1 == NULL) {
-    printf("\33[31mPlease choose an integer(>0) as your choice!\033[0m\n");
+    printf("\033[31mPlease choose an integer(>0) as your choice!\033[0m\n");
 		return 0;
 	}
 	else {
 		char *token2 = strtok(NULL, " ");
 		if (token2 == NULL) {
-			printf("\33[31mYou should choose a hexadecimal as your option!\033[0m\n");
+			printf("\033[31mYou should choose a hexadecimal as your option!\033[0m\n");
 			return 0;
 		}
 		else {
@@ -104,16 +104,16 @@ static int cmd_x(char *args) {
 			}
 			vaddr_t addr = strtol(token2, NULL, 16);
 			if (n <= 0 || addr < 0 || addr > 0x07ffffff) {
-				printf("\33[31mInvalid arguments: N should be positive, EXPR should be a valid address!\033[0m\n");
+				printf("\033[31mInvalid arguments: N should be positive, EXPR should be a valid address!\033[0m\n");
 				return 0;
 			}
 			else {
-				printf("\33[1mStarting from 0x%lx to read %d addresses' information:\033[0m\n", addr, n);
+				printf("\033[1mStarting from 0x%lx to read %d addresses' information:\033[0m\n", addr, n);
 				for (int i = 0; i < n; i++) {
 					if (i % 5 == 0)
 						printf("\n");
 					word_t data = vaddr_read(addr + i * 4 + CONFIG_MBASE, 4);
-					printf("\33[33m0x%08lx\033[0m\t", data);
+					printf("\033[33m0x%08lx\033[0m\t", data);
 				}
 			}
 			printf("\n");
@@ -135,7 +135,7 @@ static int cmd_p(char *args) {
 }
 
 static int cmd_w(char *args) {
-  if (args == NULL) printf("\33[31mPlease choose an expression as your choice!\033[0m\n");
+  if (args == NULL) printf("\033[31mPlease choose an expression as your choice!\033[0m\n");
   else {
     bool success = false;
 	  word_t value = expr(args, &success);
@@ -151,7 +151,7 @@ static int cmd_w(char *args) {
 
 static int cmd_d(char *args) {
 	if (args == NULL) {
-		printf("\33[31mPlease choose an integer as your choice!\033[0m\n");cpu_exec(1);
+		printf("\033[31mPlease choose an integer as your choice!\033[0m\n");cpu_exec(1);
 	}
 	else {
 		int n = atoi(args);
