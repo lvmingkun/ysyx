@@ -47,7 +47,7 @@ WP* new_wp(char *exp, word_t valu) {
 	wp_num--;
 	head->expr = strdup(exp);
 	head->value = valu;
-	printf("Add a new watchpoint %d\n", head->NO);
+	printf("Add a new watchpoint. %d\n", head->NO);
 	return head;
 }
 
@@ -80,7 +80,7 @@ void scan_watchpoints() {
 		if (p->value != new_value) {
 			nemu_state.state = NEMU_STOP;
 			p->value = new_value;
-			printf("\033[32mWatchpoint %d has been changed , it becomes %s, program stops\33[0m\n", p->NO, p->expr);
+			printf("\033[32mWatchpoint %d has been changed , it becomes %ld, program stops.\33[0m\n", p->NO, p->value);
 		}
 	p = p->next;
 	}
@@ -88,7 +88,7 @@ void scan_watchpoints() {
 
 void print_watchpoints() {
 	WP *p = head;
-	if (p == NULL) printf("No any watchpoints\n");
+	if (p == NULL) printf("No any watchpoints.\n");
 	else {
 		while (p) {
 			printf("\033[35mWatchpoint \033[33m%d\033[35m : \033[33m%s \033[35mis \033[33m%ld\033[0m\n", p->NO, p->expr, p->value);
@@ -99,12 +99,12 @@ void print_watchpoints() {
 
 void delete_watchpoints(int num) {
 	WP *p = head;
-	if (p == NULL) printf("\033[31mThere is no watchpoints\033[0m\n");
+	if (p == NULL) printf("\033[31mThere is no watchpoints.\033[0m\n");
 	else {
 		while (p) {
 			if (p->NO == num) {
 				free_wp(p);
-			  printf("The watchpoint %d has been deleted\n", num);
+			  printf("The watchpoint %d has been deleted.\n", num);
 			  break;
 			}
 			p = p->next;
